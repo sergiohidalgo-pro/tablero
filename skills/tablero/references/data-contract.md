@@ -72,6 +72,15 @@ El buffer es un control del lector (0 / 30 / 50 %), no un número tuyo: 30 % por
 
 Antes de publicar: **`Σ act` de `PHASES` debe cuadrar con las horas de `SESSIONS`** (± 0,5 h). Si no cuadra, hay trabajo hecho que ninguna tarea declara, o una tarea se atribuyó horas que no ocurrieron. Cuadra el dato, no lo maquilles.
 
+## Actualizar un tablero que ya existe
+
+La URL es única por proyecto, así que actualizar es republicar encima. Antes de hacerlo:
+
+1. **Lee la versión viva**, no la copia que bajaste al empezar la sesión. Entre medio pudo publicar otra sesión, otro agente o la propia página.
+2. **Compara contra tu evidencia.** Lo que la versión viva afirme y tú no hayas re-verificado, se conserva tal cual.
+3. **Si hay contradicción, vuelve a la fuente primaria** antes de sobrescribir. Que un tablero se haya publicado después no lo hace correcto: heredar en silencio una cifra equivocada es peor que dejar una vieja con su fecha.
+4. Publica sólo lo que agregas y lo que corriges, y deja constancia en el `stamp` y en las fuentes de qué se re-verificó y a qué hora.
+
 ## Persistencia
 
 Los seis controles (`hpd`, `days`, `start`, `blockstart`, `buffer`, `rate`) se guardan en `localStorage` con prefijo `tablero.`. Envolver siempre en `try/catch`: el visor puede tener el almacenamiento bloqueado.

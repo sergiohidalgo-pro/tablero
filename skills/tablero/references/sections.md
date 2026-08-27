@@ -8,6 +8,19 @@ Eyebrow (contexto: sub-proyecto, cliente, área) · H1 (nombre corto, no una fra
 
 El `stamp` es la firma del dato: sin fecha y fuentes, el tablero no se publica.
 
+Debajo va el **sello**, dos botones que se rellenan solos desde `EMBLEMA` y `CONTEXTO`:
+
+- **El emblema** — el mismo emoji que el favicon, en grande. Al tocarlo se abre una modal que explica por qué ese emoji y no otro: qué del proyecto representa. Elige uno que signifique algo (una pieza que se extrae, un semáforo, una carretera), no un adorno; si no puedes explicar la elección en dos frases, el emoji está mal elegido.
+- **El semáforo de contexto** — tres luces, una encendida. **No mide avance**: mide si se puede seguir sin depender de nadie. Al tocarlo, la modal lista qué falta y qué ya está resuelto.
+
+| Luz | Significa |
+|---|---|
+| 🟢 verde | Está todo lo necesario para llegar al final. Solo faltan horas. |
+| 🟡 amarillo | Se puede avanzar, pero hay definiciones abiertas que van a frenar. |
+| 🔴 rojo | Falta información o decisiones sin las cuales el proyecto no cierra. |
+
+La distinción que hace útil al semáforo es **falta trabajo** contra **falta que alguien decida**. Un proyecto con 20 h por delante y todo definido está en verde; uno con 2 h por delante pero esperando una credencial que nadie rota está en rojo. Cada punto de `falta` nombra a quién o a qué espera: sin dueño, no es un pendiente, es una queja.
+
 ## 2. Banda de medidores (4, orden fijo)
 
 1. Anillo doble: avance por esfuerzo (arco grueso) y por tareas (arco fino).

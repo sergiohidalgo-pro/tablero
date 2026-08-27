@@ -45,6 +45,23 @@ Corta pausas mayores a 20 min: dos bloques, no uno largo. La honestidad del tabl
 
 Solo lo **incremental**. `COST_NOTE` dice qué queda fuera y por qué. La `.callout` de la sección nombra la palanca: qué línea domina y cómo se acota.
 
+## EMBLEMA · CONTEXTO
+
+```js
+const EMBLEMA = {emoji:'🧩', titulo:'La pieza que sale', porque:'<p>…</p>'};
+const CONTEXTO = {
+  estado:'amarillo',              // rojo | amarillo | verde
+  titulo:'Avanza con reservas',
+  resumen:'Una frase con el porqué del color',
+  falta:['Qué falta y de quién depende'],
+  hay:['Qué ya está resuelto y no hay que volver a discutir'],
+};
+```
+
+`emoji` es el mismo del favicon del artefacto, para que la pestaña y la página digan lo mismo. `porque` acepta HTML y responde una sola pregunta: por qué ese emoji representa a este proyecto.
+
+`estado` no es el avance: es si se puede seguir sin depender de nadie. Verde solo si lo único que falta son horas. Cada entrada de `falta` nombra al dueño o al insumo; si no lo tiene, no es accionable y no va.
+
 ## DONE_BARS · TODAY · PHASE_ORDER
 
 - `DONE_BARS`: barras verdes del Gantt, trabajo ya hecho. `{name, s:'AAAA-MM-DD', e:'AAAA-MM-DD'}`.

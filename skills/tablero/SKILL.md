@@ -20,6 +20,8 @@ Do NOT load for a one-line status answer, a commit log summary, or a plain check
 - `Σ act` across `PHASES` must match total `SESSIONS` hours within 0,5 h. Reconcile the data before publishing; never adjust one side to hide the gap.
 - Costs are incremental: only what is new. Name the price source and date, and list what is excluded because it was already paid.
 - Never invent qualitative claims about rhythm or productivity. `EVAL_EXTRA` entries need a time and a result.
+- `CONTEXTO.estado` measures whether the project can proceed unblocked, NOT how much is done. Green only when nothing but hours is missing; red when a decision, credential or answer someone else owes is what stands in the way. Every `falta` entry names the owner or the input it waits on.
+- `EMBLEMA.emoji` must match the artifact `favicon`, and `porque` must justify the choice in two sentences. If you cannot, pick a different emoji.
 - Do not edit the CSS in `assets/template.html`: the palette, typography and motion ARE the format. Extend by adding sections, not by restyling.
 - If you add movement, follow the performance rules in `references/design-system.md`: nothing animates off-screen, nothing that moves carries a `drop-shadow`, and a re-render is not a re-animation.
 - Keep the footer `.brand` block: logo slot + credit line + MIT link.
@@ -51,7 +53,7 @@ Do NOT load for a one-line status answer, a commit log summary, or a plain check
 1. Gather evidence first. Read the primary sources; list what you could NOT verify.
 2. Copy `assets/template.html` to the working file (scratchpad, or where the user asks). For a local file, wrap it with `assets/local-wrapper.html` — the template is a fragment and only the Artifact tool supplies the html/head/body shell.
 3. When updating an existing tablero: read the live version FIRST, diff it against your evidence, and keep every fact it has that you did not re-verify. Publish only additions and corrections you can source.
-4. Fill the `// ---------- data ----------` block only: `PHASES`, `SESSIONS`, `COSTS`, `DONE_BARS`, `TODAY`, `PHASE_ORDER`, `COST_NOTE`, `EVAL_RECO`, `EVAL_EXTRA`. See `references/data-contract.md`.
+4. Fill the `// ---------- data ----------` block only: `EMBLEMA`, `CONTEXTO`, `PHASES`, `SESSIONS`, `COSTS`, `DONE_BARS`, `TODAY`, `PHASE_ORDER`, `COST_NOTE`, `EVAL_RECO`, `EVAL_EXTRA`. See `references/data-contract.md`.
 5. Replace every `{{...}}` placeholder in the HTML. Search for `{{` and confirm zero matches before publishing.
 6. Adjust the diagram per `references/sections.md`; the LED, packets and power-on view are injected by JS — only author `<g data-s>`, `<path class="edge">`, `<rect class="zone">`. Give every component a `data-title` and a `data-info` explaining what it is and why it sits in that state: that is what the reader gets when tapping the box.
 7. Open the local file to verify it renders before handing it over. Fonts come from Google Fonts and need network; the fallback stack must keep it readable offline.

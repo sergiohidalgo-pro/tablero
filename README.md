@@ -21,7 +21,8 @@
 
 Le pides el estado de un proyecto y publica una página con:
 
-- **Cuatro medidores** arriba: avance por esfuerzo y por tareas, horas hechas, horas por hacer con buffer, y el foco o bloqueo del momento.
+- **Un emblema y un semáforo de contexto**: el emoji del proyecto explica por qué se eligió, y el semáforo dice si se puede avanzar sin depender de nadie — verde solo si lo único que falta son horas.
+- **Cuatro medidores**: avance por esfuerzo y por tareas, horas hechas, horas por hacer con buffer, y el foco o bloqueo del momento.
 - **Dónde vamos** en tres columnas: encendido · bloqueado · apagado, y la acción concreta que sigue.
 - **Un diagrama** donde cada componente está literalmente encendido, parcial o apagado, con paquetes viajando por las conexiones vivas. Cada caja se puede tocar para leer qué es y por qué está así, y un toggle *Meta* enciende todo para mostrar hacia dónde va.
 - **Backlog** en fases plegables, con horas hechas y estimadas por tarea.
@@ -39,7 +40,11 @@ Las capturas de abajo salen de ahí.
 
 ![Encabezado, medidores y dónde vamos](docs/img/hero-dark.webp)
 
-*Arriba: los cuatro medidores y las tres columnas de estado. Todo se calcula desde un único bloque de datos.*
+*Arriba: el emblema del proyecto, el semáforo de contexto, los cuatro medidores y las tres columnas de estado. Todo se calcula desde un único bloque de datos.*
+
+![Modal del semáforo de contexto](docs/img/contexto.webp)
+
+*El semáforo no mide avance: mide si se puede seguir sin depender de nadie. Verde es "solo faltan horas"; rojo es "falta que alguien decida". Al tocarlo lista qué falta, con dueño, y qué ya está resuelto. El emoji de al lado explica por qué se eligió ese ícono y no otro.*
 
 ![Diagrama de arquitectura con estado por componente](docs/img/diagrama-dark.webp)
 

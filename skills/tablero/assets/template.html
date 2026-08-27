@@ -82,6 +82,47 @@ header.top .sub{color:var(--muted);margin-top:12px;max-width:78ch;font-size:15.5
 .stamp{display:inline-flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);margin-top:10px;font-family:var(--font-mono)}
 .stamp .dot{width:8px;height:8px;border-radius:50%;background:var(--on);box-shadow:0 0 10px var(--on-glow);animation:pulse 2.2s ease-in-out infinite}
 
+/* ---------- sello: emblema y semáforo de contexto ---------- */
+.sello{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;margin-top:18px}
+.sello button{font:inherit;color:inherit;text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);transition:border-color .2s,transform .15s}
+.sello button:hover{border-color:var(--line-strong)}
+.sello button:active{transform:translateY(1px)}
+.sello button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.emblem{display:flex;align-items:center;gap:14px;padding:12px 18px 12px 14px}
+.emblem .emo{font-size:46px;line-height:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.25))}
+.emblem .emo-txt{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--muted);max-width:26ch}
+.emblem .emo-txt b{font-family:var(--font-display);font-size:14.5px;color:var(--ink);font-weight:600}
+.emblem .emo-txt span{font-size:11.5px;color:var(--faint)}
+.tl{display:flex;align-items:center;gap:14px;padding:12px 18px 12px 14px}
+.lights{display:flex;flex-direction:column;gap:5px;padding:7px 6px;background:var(--bg-2);border:1px solid var(--line);border-radius:9px;flex:none}
+.lights i{width:13px;height:13px;border-radius:50%;background:var(--off-soft);border:1px solid var(--line);transition:background .3s,box-shadow .3s}
+.tl[data-ctx="rojo"] .lights i.r{background:var(--bad);border-color:transparent;box-shadow:0 0 10px var(--bad-glow);animation:blink 1.6s steps(1) infinite}
+.tl[data-ctx="amarillo"] .lights i.y{background:var(--warn);border-color:transparent;box-shadow:0 0 10px var(--warn-glow);animation:pulse 2s ease-in-out infinite}
+.tl[data-ctx="verde"] .lights i.g{background:var(--on);border-color:transparent;box-shadow:0 0 10px var(--on-glow)}
+.tl .tl-txt{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--muted);max-width:30ch}
+.tl .tl-txt b{font-family:var(--font-display);font-size:14.5px;font-weight:600}
+.tl[data-ctx="rojo"] .tl-txt b{color:var(--bad)}
+.tl[data-ctx="amarillo"] .tl-txt b{color:var(--warn)}
+.tl[data-ctx="verde"] .tl-txt b{color:var(--on)}
+.tl .tl-txt .rs{font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tl .tl-txt span{font-size:11.5px;color:var(--faint)}
+
+/* ---------- modales ---------- */
+dialog.md{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);border-radius:14px;padding:0;max-width:640px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.45)}
+dialog.md::backdrop{background:rgba(4,8,14,.62);backdrop-filter:blur(3px)}
+dialog.md .md-h{display:flex;align-items:center;gap:14px;padding:20px 22px 12px}
+dialog.md .md-h .emo{font-size:38px;line-height:1}
+dialog.md h3{font-family:var(--font-display);font-size:19px;margin:0}
+dialog.md .md-b{padding:0 22px 6px;color:var(--muted);font-size:14px;line-height:1.6}
+dialog.md .md-b p{max-width:none}
+dialog.md .md-b ul{margin:8px 0 0;padding-left:20px}
+dialog.md .md-b li{margin-bottom:6px}
+dialog.md .md-b .lbl{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-top:16px;display:block}
+dialog.md .md-f{display:flex;justify-content:flex-end;padding:14px 22px 18px}
+dialog.md .md-f button{font:inherit;font-weight:600;font-size:13.5px;cursor:pointer;background:var(--accent);color:var(--accent-ink);border:0;border-radius:9px;padding:8px 18px}
+dialog.md .md-f button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:560px){.sello{flex-direction:column}.emblem,.tl{width:100%}}
+
 /* ---------- status band ---------- */
 .band{display:grid;grid-template-columns:1.35fr 1fr 1fr 1.2fr;gap:14px;margin:18px 0 26px}
 @media (max-width:980px){.band{grid-template-columns:1fr 1fr}}
@@ -329,7 +370,12 @@ footer code{font-family:var(--font-mono);font-size:12px}
   <h1>{{TITULO}}</h1>
   <p class="sub">{{Una frase: qué es esto, dónde corre, qué NO toca. Nombres propios en <span class="mono">mono</span>.}}</p>
   <div class="stamp"><span class="dot"></span> actualizado {{AAAA-MM-DD HH:MM}} · {{hito vivo}} · {{fuentes: transcripts, az CLI, runs}}</div>
+  <!-- El sello se rellena desde EMBLEMA y CONTEXTO; no lo escribas a mano. -->
+  <div class="sello" id="sello"></div>
 </header>
+
+<dialog class="md" id="dlg-emo" aria-labelledby="dlg-emo-t"></dialog>
+<dialog class="md" id="dlg-ctx" aria-labelledby="dlg-ctx-t"></dialog>
 
 <!-- BANDA: 4 medidores. Orden fijo: avance · hecho · pendiente · foco/riesgo -->
 <div class="band" id="band">
@@ -505,6 +551,24 @@ footer code{font-family:var(--font-mono);font-size:12px}
       {n:'{{Mejora opcional}}', s:'opt', est:1, d:'{{No cuenta para el porcentaje.}}'},
     ]},
   ];
+  // El emoji del tablero: el mismo que el favicon. Elige uno que signifique algo del proyecto
+  // y explica la elección en 'porque' — al tocarlo se abre esa explicación.
+  const EMBLEMA = {
+    emoji:'{{🚦}}',
+    titulo:'{{Nombre del emblema, 2-4 palabras}}',
+    porque:'<p>{{Por qué este emoji y no otro: qué representa del proyecto. Una o dos frases.}}</p>',
+  };
+  // Semáforo de contexto. NO mide avance: mide si se puede seguir sin depender de nadie.
+  //   verde    = está todo lo necesario, solo faltan horas
+  //   amarillo = se puede avanzar, pero hay definiciones abiertas que van a frenar
+  //   rojo     = falta información o decisiones sin las cuales el proyecto no cierra
+  const CONTEXTO = {
+    estado:'{{rojo|amarillo|verde}}',
+    titulo:'{{Veredicto en 2-4 palabras}}',
+    resumen:'{{Una frase: por qué está en ese color}}',
+    falta:['{{Qué falta y de quién depende — sé concreto: persona, decisión, insumo}}'],
+    hay:['{{Qué sí está resuelto y no hay que volver a discutir}}'],
+  };
   // Bloques reales de sesión (cortando pausas > 20 min). k: on (horario normal) | late (nocturno) | cut (interrumpido)
   const SESSIONS = [
     {label:'{{lun 24-ago}}', date:'2026-08-24', blocks:[{s:'19:52', e:'22:50', k:'late', t:'{{qué se hizo}}'}]},
@@ -681,6 +745,35 @@ footer code{font-family:var(--font-mono);font-size:12px}
   $('#v-hoy').addEventListener('click',()=>setView(false));
   $('#v-meta').addEventListener('click',()=>setView(true));
 
+  // ---------- sello: emblema y semáforo de contexto ----------
+  const CTX_LABEL={rojo:'faltan definiciones',amarillo:'avanza con reservas',verde:'contexto completo'};
+  function renderSello(){
+    const host=$('#sello'); if(!host)return;
+    host.innerHTML=
+      '<button class="emblem" id="btn-emo" aria-haspopup="dialog"><span class="emo">'+EMBLEMA.emoji+'</span>'+
+      '<span class="emo-txt"><b>'+EMBLEMA.titulo+'</b><span>por qué este ícono</span></span></button>'+
+      '<button class="tl" id="btn-ctx" data-ctx="'+CONTEXTO.estado+'" aria-haspopup="dialog">'+
+      '<span class="lights" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></span>'+
+      '<span class="tl-txt"><b>'+CONTEXTO.titulo+'</b><span class="rs">'+CONTEXTO.resumen+'</span><span>'+CTX_LABEL[CONTEXTO.estado]+' · ver detalle</span></span></button>';
+    const dE=$('#dlg-emo'), dC=$('#dlg-ctx');
+    dE.innerHTML='<div class="md-h"><span class="emo">'+EMBLEMA.emoji+'</span><h3 id="dlg-emo-t">'+EMBLEMA.titulo+'</h3></div>'+
+      '<div class="md-b">'+EMBLEMA.porque+'</div><div class="md-f"><button data-close>Entendido</button></div>';
+    const li=a=>(a||[]).map(x=>'<li>'+x+'</li>').join('');
+    dC.innerHTML='<div class="md-h"><span class="emo">'+({rojo:'🔴',amarillo:'🟡',verde:'🟢'}[CONTEXTO.estado]||'⚪')+'</span><h3 id="dlg-ctx-t">'+CONTEXTO.titulo+'</h3></div>'+
+      '<div class="md-b"><p>'+CONTEXTO.resumen+'</p>'+
+      (CONTEXTO.falta&&CONTEXTO.falta.length?'<span class="lbl">Falta para poder cerrar</span><ul>'+li(CONTEXTO.falta)+'</ul>':'')+
+      (CONTEXTO.hay&&CONTEXTO.hay.length?'<span class="lbl">Ya resuelto</span><ul>'+li(CONTEXTO.hay)+'</ul>':'')+
+      '</div><div class="md-f"><button data-close>Cerrar</button></div>';
+    const open=d=>{ if(d.showModal)d.showModal(); else d.setAttribute('open','') };
+    $('#btn-emo').addEventListener('click',()=>open(dE));
+    $('#btn-ctx').addEventListener('click',()=>open(dC));
+    [dE,dC].forEach(d=>{
+      d.querySelector('[data-close]').addEventListener('click',()=>d.close?d.close():d.removeAttribute('open'));
+      // clic en el fondo cierra, como espera cualquiera
+      d.addEventListener('click',e=>{ if(e.target===d)d.close&&d.close() });
+    });
+  }
+
   // ---------- diagram: detalle por componente ----------
   function wireBoxes(){
     const box=$('#diagram-info'); if(!box)return;
@@ -731,7 +824,7 @@ footer code{font-family:var(--font-mono);font-size:12px}
 
   // ---------- init ----------
   ['hpd','days','start','blockstart','buffer','rate'].forEach(id=>{const el=$('#'+id);const v=load(id,null);if(v!==null)el.value=v;el.addEventListener('input',()=>{store(id,el.value);renderMeters();renderGantt()})});
-  decorateDiagram(); wireBoxes(); if(load('view','hoy')==='meta')setView(true);
+  renderSello(); decorateDiagram(); wireBoxes(); if(load('view','hoy')==='meta')setView(true);
   renderPhases(); renderGantt(); observe(); idle();
   setTimeout(renderMeters,150);
 })();

@@ -22,11 +22,18 @@ Do NOT load for a one-line status answer, a commit log summary, or a plain check
 - Never invent qualitative claims about rhythm or productivity. `EVAL_EXTRA` entries need a time and a result.
 - Do not edit the CSS in `assets/template.html`: the palette, typography and motion ARE the format. Extend by adding sections, not by restyling.
 - Keep the footer `.brand` block: logo slot + credit line + MIT link.
+- Default output is a LOCAL html file. Publish to claude.ai only when the user asks for it in this session — publishing is an outward action.
 - One artifact per project. To update, republish the same file path (or pass its `url`) — never create a second URL.
 - The artifact is written in Spanish (neutral, `tú`); code identifiers stay in English.
 - Load the `artifact-design` skill before writing the file, as the Artifact tool requires.
 
 ## Decision Gates
+
+| Invocation | Output |
+|---|---|
+| `/tablero` (default) | Write the self-contained html file, report its path, offer to publish in one line. Do NOT publish. |
+| `/tablero publicar` | Write the file and publish it as an Artifact in the same turn. |
+| `/tablero <url>` | Update that published tablero: read it, rebuild `DATA` from current state, republish to the SAME url. |
 
 | Situation | Section to use |
 |---|---|
@@ -40,16 +47,17 @@ Do NOT load for a one-line status answer, a commit log summary, or a plain check
 ## Execution Steps
 
 1. Gather evidence first. Read the primary sources; list what you could NOT verify.
-2. Copy `assets/template.html` to the working file (scratchpad, or where the user asks).
+2. Copy `assets/template.html` to the working file (scratchpad, or where the user asks). For a local file, wrap it with `assets/local-wrapper.html` — the template is a fragment and only the Artifact tool supplies the html/head/body shell.
 3. Fill the `// ---------- data ----------` block only: `PHASES`, `SESSIONS`, `COSTS`, `DONE_BARS`, `TODAY`, `PHASE_ORDER`, `COST_NOTE`, `EVAL_RECO`, `EVAL_EXTRA`. See `references/data-contract.md`.
 4. Replace every `{{...}}` placeholder in the HTML. Search for `{{` and confirm zero matches before publishing.
 5. Adjust the diagram per `references/sections.md`; the LED, packets and power-on view are injected by JS — only author `<g data-s>`, `<path class="edge">`, `<rect class="zone">`.
-6. Publish with the Artifact tool: `favicon` stable across redeploys, `title` = short project name, `description` = one line.
-7. Report the URL plus what is estimated and what is verified.
+6. Open the local file to verify it renders before handing it over. Fonts come from Google Fonts and need network; the fallback stack must keep it readable offline.
+7. Only when publishing: use the Artifact tool with a `favicon` stable across redeploys, `title` = short project name, `description` = one line.
+8. Report the file path (or URL), what is estimated and what is verified.
 
 ## Output Contract
 
-Return: the artifact URL, the three headline numbers (effort %, hours done, hours left with buffer), the current blocker, and an explicit list of figures that are estimates.
+Return: the file path (or the artifact URL when published), the three headline numbers (effort %, hours done, hours left with buffer), the current blocker, and an explicit list of figures that are estimates.
 
 ## References
 
@@ -57,4 +65,5 @@ Return: the artifact URL, the three headline numbers (effort %, hours done, hour
 - `references/sections.md` — section catalogue, diagram rules, when to swap a section.
 - `references/design-system.md` — tokens, components, motion and accessibility rules.
 - `assets/template.html` — the format itself.
+- `assets/local-wrapper.html` — html/head/body shell for local files.
 - `assets/logo.svg` — brand slot for the footer.

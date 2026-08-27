@@ -1,5 +1,16 @@
+<!doctype html>
+<html lang="es">
+<head>
+<title>tablero · demo</title>
+<meta name="description" content="Demo del formato tablero: estado de proyecto con medidores, backlog, costos y Gantt simulable.">
 <meta charset="utf-8">
-<title>{{TITULO}}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- El template es un fragmento: al publicar como Artifact, la herramienta lo envuelve.
+     Para un archivo local hay que envolverlo aquí. Pega el template completo en lugar de la marca. -->
+</head>
+<body>
+<meta charset="utf-8">
+<title>Checkout fuera del monolito</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Dark-first: bare :root is the dark palette; light is the swap. */
@@ -305,10 +316,10 @@ footer code{font-family:var(--font-mono);font-size:12px}
 
 <div class="wrap">
 <header class="top">
-  <div class="eyebrow">{{EYEBROW · contexto: sub-proyecto, cliente, área}}</div>
-  <h1>{{TITULO}}</h1>
-  <p class="sub">{{Una frase: qué es esto, dónde corre, qué NO toca. Nombres propios en <span class="mono">mono</span>.}}</p>
-  <div class="stamp"><span class="dot"></span> actualizado {{AAAA-MM-DD HH:MM}} · {{hito vivo}} · {{fuentes: transcripts, az CLI, runs}}</div>
+  <div class="eyebrow">Plataforma · migración de checkout</div>
+  <h1>Checkout fuera del monolito</h1>
+  <p class="sub">Sacar el checkout del monolito hacia un servicio propio en <span class="mono">staging</span>, con doble escritura y corte por porcentaje. No toca pagos ni el catálogo: esos siguen en el monolito.</p>
+  <div class="stamp"><span class="dot"></span> actualizado 2026-08-21 09:00 · doble escritura activa en staging · runs 812–834 · transcripts 18–20 ago</div>
 </header>
 
 <!-- BANDA: 4 medidores. Orden fijo: avance · hecho · pendiente · foco/riesgo -->
@@ -317,20 +328,20 @@ footer code{font-family:var(--font-mono);font-size:12px}
     <svg viewBox="0 0 120 120" aria-label="Avance por esfuerzo y por tareas"><circle class="track" cx="60" cy="60" r="50"/><circle class="arc" id="ring-e" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16"/><circle class="track" cx="60" cy="60" r="40" style="stroke-width:4"/><circle class="arc2" id="ring-t" cx="60" cy="60" r="40" stroke-dasharray="251.33" stroke-dashoffset="251.33"/><text class="pct" x="60" y="64" text-anchor="middle" id="ring-pct">0%</text><text class="pctl" x="60" y="78" text-anchor="middle">esfuerzo</text></svg>
     <div class="k"><div class="label">Avance</div><span class="ac"><b id="k-effort">0 %</b> por esfuerzo (horas)</span><span class="on"><b id="k-tasks">0 / 0</b> tareas cerradas</span><span class="foot" id="k-foot"></span></div>
   </div>
-  <div class="card meter rv"><div class="label">Horas hechas</div><div class="big"><span data-count id="m-actual">0</span><small>h en <span id="m-blocks">0</span> bloques</small></div><div class="bar"><i class="ok" id="m-actual-bar"></i></div><div class="foot" id="m-actual-foot">{{desglose por día · criterio de corte de pausas}}</div></div>
+  <div class="card meter rv"><div class="label">Horas hechas</div><div class="big"><span data-count id="m-actual">0</span><small>h en <span id="m-blocks">0</span> bloques</small></div><div class="bar"><i class="ok" id="m-actual-bar"></i></div><div class="foot" id="m-actual-foot">18-ago 2,5 h · 19-ago 3,1 h · 20-ago 2,6 h · cortando pausas &gt; 20 min</div></div>
   <div class="card meter rv"><div class="label">Horas por hacer</div><div class="big"><span data-count id="m-left">0</span><small>h con buffer</small></div><div class="bar"><i id="m-left-bar"></i></div><div class="foot" id="m-left-foot"></div></div>
   <!-- Si hay un bloqueo real, usa class="card meter now rv" y <span class="led bad"> -->
-  <div class="card meter rv"><div class="label">Siguiente bloque</div><div class="big txt"><span class="led" style="background:var(--warn);box-shadow:0 0 10px var(--warn-glow)"></span><span>{{Qué sigue, en 4-6 palabras}}</span></div><div class="foot">{{Estado honesto: qué quedó vivo, qué falta, bug abierto con su id}}</div></div>
+  <div class="card meter rv"><div class="label">Siguiente bloque</div><div class="big txt"><span class="led" style="background:var(--warn);box-shadow:0 0 10px var(--warn-glow)"></span><span>Migrar el histórico en la ventana del sábado</span></div><div class="foot">La doble escritura funciona, pero la reconciliación nocturna no está: si el servicio falla de noche nadie se entera hasta la mañana. La migración del histórico depende de operaciones.</div></div>
 </div>
 </div>
 
 <nav class="sec"><div class="wrap"><ul>
   <li><a href="#donde">Dónde vamos</a></li>
-  <li><a href="#arq">{{Arquitectura|Capa de detección|Mapa}}</a></li>
+  <li><a href="#arq">Arquitectura</a></li>
   <li><a href="#backlog">Backlog</a></li>
   <li><a href="#costos">Costos</a></li>
   <li><a href="#gantt">Gantt</a></li>
-  <li><a href="#ritmo">{{Ritmo de sesiones|Riesgos vivos}}</a></li>
+  <li><a href="#ritmo">Ritmo de sesiones</a></li>
 </ul></div></nav>
 
 <div class="wrap">
@@ -340,25 +351,25 @@ footer code{font-family:var(--font-mono);font-size:12px}
   <div class="cols">
     <div class="card col on">
       <h3><span class="chip done">encendido</span></h3>
-      <ul><li><b>{{Hito}}</b>: {{qué quedó funcionando, con evidencia verificable}}.</li></ul>
+      <ul><li><b>Base y contrato</b>: CI verde en 2m14s, credenciales federadas sin secretos y el contrato OpenAPI congelado con front.</li></ul>
     </div>
     <div class="card col bad">
       <h3><span class="chip blocked">bloqueado</span></h3>
-      <ul><li><b>{{Bloqueo}}</b>: {{qué frena, quién lo destraba, qué se necesita}}.</li></ul>
+      <ul><li><b>Migración del histórico</b>: 3,4 M filas necesitan la ventana del sábado; la aprueba operaciones.</li></ul>
     </div>
     <div class="card col off">
       <h3><span class="chip todo">apagado</span></h3>
-      <ul><li><b>{{Pendiente}}</b>: {{qué falta y de qué depende}}.</li></ul>
+      <ul><li><b>Trazas y alertas</b>: dependen de que el corte de lectura esté al 100 %.</li></ul>
     </div>
   </div>
   <div class="card next">
-    <span class="k">siguiente</span><span>{{La acción concreta: archivo, comando o URL exacta}}</span>
-    <span class="k">necesita</span><span>{{Qué requiere "dale" del usuario}}</span>
+    <span class="k">siguiente</span><span>Pedir la ventana del sábado 23-ago y dejar el job de reconciliación en <code>jobs/reconcile.ts</code></span>
+    <span class="k">necesita</span><span>Ventana de mantenimiento y el deploy a staging con aprobación</span>
   </div>
 </section>
 
 <section id="arq" class="rv">
-  <h2>{{Arquitectura}}</h2>
+  <h2>Arquitectura</h2>
   <div class="arch-head">
     <div class="legend"><span><i class="l"></i> encendido</span><span><i class="l doing"></i> parcial</span><span><i class="l off"></i> apagado</span><span><i class="e"></i> dato fluyendo</span><span><i class="e off"></i> unión cerrada</span></div>
     <div class="toggle" role="group" aria-label="Vista del diagrama"><button id="v-hoy" aria-pressed="true">Hoy</button><button id="v-meta" aria-pressed="false">Meta · encender todo</button></div>
@@ -371,26 +382,51 @@ footer code{font-family:var(--font-mono);font-size:12px}
          done/doing se animan con paquetes; todo queda punteada y apagada.
        · Zonas (clúster, VPC, cuenta) con <rect class="zone">; lo que no cambia, con <rect class="ext">.
        · viewBox ancho (1100x560 típico); min-width:760px lo hace scrollear en móvil sin romperse. -->
-  <svg viewBox="0 0 1100 560" role="img" aria-label="{{Diagrama con el estado de cada componente y el flujo de datos}}">
+  <svg viewBox="0 0 1100 520" role="img" aria-label="Diagrama del checkout: monolito, servicio nuevo y sus datos, con el estado de cada pieza">
     <defs>
       <marker id="arr-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--on)"/></marker>
       <marker id="arr-warn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--warn)"/></marker>
       <marker id="arr-off" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--off)"/></marker>
       <marker id="arr-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
     </defs>
-    <rect class="zone" x="262" y="20" width="560" height="520" rx="12"/>
-    <text x="280" y="42" class="h">{{zona}}</text><text x="280" y="58" class="t">{{atributos de la zona}}</text>
-    <path id="e1" class="edge" data-s="done" d="M180 53H296"/>
-    <rect class="ext" x="30" y="30" width="150" height="46" rx="8"/><text x="105" y="50" text-anchor="middle" class="h">{{Externo}}</text><text x="105" y="66" text-anchor="middle" class="t">{{no cambia}}</text>
-    <g data-s="done"><rect class="box" x="296" y="30" width="228" height="46" rx="7"/><text x="410" y="50" text-anchor="middle" class="h">{{Componente}}</text><text x="410" y="66" text-anchor="middle" class="t">{{evidencia corta}}</text></g>
+    <rect class="zone" x="250" y="20" width="360" height="470" rx="12"/>
+    <text x="270" y="46" class="h">monolito (hoy)</text><text x="270" y="62" class="t">un despliegue · una base de datos</text>
+    <rect class="zone" x="650" y="20" width="380" height="470" rx="12"/>
+    <text x="670" y="46" class="h">servicios (nuevo)</text><text x="670" y="62" class="t">despliegue propio · base propia</text>
+
+    <path id="e1" class="edge" data-s="done" d="M212 96H262"/>
+    <path id="e2" class="edge" data-s="doing" d="M430 146V166"/>
+    <path id="e3" class="edge" data-s="done" d="M592 98H662"/>
+    <path id="e4" class="edge" data-s="done" d="M430 246V286"/>
+    <path id="e5" class="edge" data-s="doing" d="M592 198H662"/>
+    <path id="e6" class="edge" data-s="doing" d="M840 246V286"/>
+    <path id="e7" class="edge" data-s="todo" d="M592 318H662"/>
+    <path id="e9" class="edge" data-s="done" d="M212 316H262"/>
+
+    <rect class="ext" x="30" y="70" width="180" height="52" rx="8"/><text x="120" y="92" text-anchor="middle" class="h">Clientes web y móvil</text><text x="120" y="108" text-anchor="middle" class="t">sin cambios de contrato</text>
+    <rect class="ext" x="30" y="290" width="180" height="52" rx="8"/><text x="120" y="312" text-anchor="middle" class="h">Pasarela de pagos</text><text x="120" y="328" text-anchor="middle" class="t">no se toca en esta fase</text>
+
+    <g data-s="doing"><rect class="box" x="270" y="70" width="320" height="56" rx="7"/><text x="430" y="92" text-anchor="middle" class="h">Router de tráfico</text><text x="430" y="110" text-anchor="middle" class="t">feature flag · 5 % al servicio nuevo</text></g>
+    <g data-s="doing"><rect class="box" x="270" y="170" width="320" height="56" rx="7"/><text x="430" y="192" text-anchor="middle" class="h">Módulo de checkout</text><text x="430" y="210" text-anchor="middle" class="t">se apaga tras 14 días estable</text></g>
+    <g data-s="done"><rect class="box" x="270" y="290" width="320" height="56" rx="7"/><text x="430" y="312" text-anchor="middle" class="h">Base de datos principal</text><text x="430" y="330" text-anchor="middle" class="t">3,4 M filas por migrar</text></g>
+
+    <g data-s="done"><rect class="box" x="670" y="70" width="340" height="56" rx="7"/><text x="840" y="92" text-anchor="middle" class="h">API de checkout</text><text x="840" y="110" text-anchor="middle" class="t">2/2 réplicas · p95 210 ms</text></g>
+    <g data-s="doing"><rect class="box" x="670" y="170" width="340" height="56" rx="7"/><text x="840" y="192" text-anchor="middle" class="h">Doble escritura y reconciliación</text><text x="840" y="210" text-anchor="middle" class="t">escribe en ambos · falta el job nocturno</text></g>
+    <g data-s="done"><rect class="box" x="670" y="290" width="340" height="56" rx="7"/><text x="840" y="312" text-anchor="middle" class="h">Base de datos de checkout</text><text x="840" y="330" text-anchor="middle" class="t">instancia chica + réplica de lectura</text></g>
+    <g data-s="todo"><rect class="box" x="670" y="390" width="340" height="56" rx="7"/><text x="840" y="412" text-anchor="middle" class="h">Trazas y alertas</text><text x="840" y="430" text-anchor="middle" class="t">p95 400 ms · 1 % de error</text></g>
   </svg>
   </div>
   <div class="tblwrap"><table class="comp">
     <thead><tr><th>Componente</th><th>Estado</th><th>Evidencia</th></tr></thead>
     <tbody>
-      <tr><td>{{Componente}}</td><td><span class="chip done">encendido</span></td><td>{{id de run, fecha, salida del comando — verificable, no adjetivos}}</td></tr>
-      <tr class="off"><td>{{Componente}}</td><td><span class="chip todo">apagado</span></td><td>{{fase en que entra}}</td></tr>
-    </tbody>
+      <tr><td>API de checkout</td><td><span class="chip done">encendido</span></td><td>Deploy 834 del 20-ago · <code>200</code> en <code>/healthz</code> · p95 210 ms en 1 h de tráfico espejo</td></tr>
+      <tr><td>Base de datos de checkout</td><td><span class="chip done">encendido</span></td><td>Instancia con réplica de lectura; respaldo diario verificado el 20-ago</td></tr>
+      <tr><td>Router de tráfico</td><td><span class="chip doing">en curso</span></td><td>Feature flag al 5 %; los pasos a 50 % y 100 % quedan tras la migración</td></tr>
+      <tr><td>Doble escritura y reconciliación</td><td><span class="chip blocked">bloqueado</span></td><td>Escribe en ambos lados desde el 19-ago; el job nocturno y su alerta no existen</td></tr>
+      <tr><td>Migración del histórico</td><td><span class="chip blocked">bloqueado</span></td><td>3,4 M filas · necesita la ventana del sábado 23-ago, la aprueba operaciones</td></tr>
+      <tr class="off"><td>Trazas y alertas</td><td><span class="chip todo">apagado</span></td><td>Fase 2</td></tr>
+      <tr class="off"><td>Apagar el módulo del monolito</td><td><span class="chip todo">apagado</span></td><td>Fase 2, tras 14 días estable</td></tr>
+</tbody>
   </table></div>
 </section>
 
@@ -404,13 +440,13 @@ footer code{font-family:var(--font-mono);font-size:12px}
   <h2>Costos</h2>
   <div class="grid2">
     <div class="card pad">
-      <h3>Dinero · {{run-rate mensual incremental (USD)}}</h3>
-      <p class="note" style="margin:4px 0 10px">{{Origen y fecha de los precios. Di explícitamente qué NO está contado porque ya se pagaba.}}</p>
+      <h3>Dinero · run-rate mensual incremental (USD)</h3>
+      <p class="note" style="margin:4px 0 10px">Precios de lista consultados el 20-ago. Solo lo nuevo: el clúster y el registro de imágenes ya se pagaban.</p>
       <div class="tblwrap"><table class="cost">
         <thead><tr><th>Recurso</th><th class="r">Bajo</th><th class="r">Alto</th></tr></thead>
         <tbody id="cost-rows"></tbody>
       </table></div>
-      <div class="callout">{{La palanca: qué línea domina el costo y cómo se acota.}}</div>
+      <div class="callout">La palanca son los logs: 4 GB/día sin filtrar pueden ser la mitad de la factura. Medir una semana y luego acotar por nivel y por servicio.</div>
     </div>
     <div class="card pad">
       <h3>Horas</h3>
@@ -420,7 +456,7 @@ footer code{font-family:var(--font-mono);font-size:12px}
         <label class="field">Tarifa hora (USD, opcional)<input id="rate" type="number" min="0" step="5" placeholder="0"></label>
       </div>
       <div class="kv" id="labor-kv"></div>
-      <p class="note">{{De dónde salen las horas hechas y qué cubre el buffer.}}</p>
+      <p class="note">Las horas hechas salen de los bloques reales de sesión. Las pendientes son estimación por tarea; el buffer cubre la depuración típica del primer corte de tráfico.</p>
     </div>
   </div>
 </section>
@@ -431,7 +467,7 @@ footer code{font-family:var(--font-mono);font-size:12px}
     <div class="controls">
       <label class="field">Horas por día<input id="hpd" type="number" min="0.5" max="8" step="0.5" value="2"></label>
       <label class="field">Días<select id="days"><option value="5" selected>Lunes a viernes</option><option value="6">Lunes a sábado</option><option value="7">Todos los días</option></select></label>
-      <label class="field">Inicio<input id="start" type="date" value="{{AAAA-MM-DD}}"></label>
+      <label class="field">Inicio<input id="start" type="date" value="2026-08-24"></label>
       <label class="field">Hora del bloque<input id="blockstart" type="time" value="09:00"></label>
     </div>
     <div class="summary-line" id="gantt-summary"></div>
@@ -453,7 +489,7 @@ footer code{font-family:var(--font-mono);font-size:12px}
 </section>
 
 <footer>
-  Fuentes: {{rutas de archivos, ids de runs, tickets, rangos de memoria — todo verificable}}. {{Qué es estimación y cómo se confirma con el dato real.}}
+  Fuentes: plan <code>docs/checkout-extraction.md</code> · runs 812–834 · tickets PLAT-118 a PLAT-131. Los costos son estimaciones con precios de lista; el consumo real se lee en la primera factura completa con tráfico.
   <div class="brand">
     <!-- Logo de Sergio Hidalgo. En un fork, reemplázalo por el tuyo (assets/logo.svg). -->
     <svg role="img" aria-label="Sergio Hidalgo" viewBox="0 0 1024 1024"><path fill-rule="evenodd" fill="#00c6a9" d="m249 33h524c120.4 0 218 97.6 218 218v524c0 120.4-97.6 218-218 218h-524c-120.4 0-218-97.6-218-218v-524c0-120.4 97.6-218 218-218z"/><path fill="#1a2238" d="m285.8 579.5c75.4 0 123.3-40.9 123.3-100.5 0-59.6-46-83.8-115.4-98.7l-10.7-2.3c-39.1-8.4-57.2-20-57.2-44.2 0-24.2 17.2-39.1 54.4-39.1 37.2 0 60 14.9 60 52.1v14h60.5v-14c0-70.7-50.7-106.1-120.5-106.1-69.8 0-114.9 35.4-114.9 95 0 59.5 39.5 82.3 107 97.2l10.7 2.3c41.9 9.4 65.6 18.7 65.6 45.7 0 26-20.9 44.6-62.8 44.6-41.9 0-67.5-19.5-67.5-58.6v-13h-60.5v13c0 70.7 52.6 112.6 128 112.6zm168.9-6.5h61.4v-135.4h121v135.4h61.5v-325.8h-61.5v134.5h-121v-134.5h-61.4z"/><path fill="#ffffff" d="m278.7 850.2c12.1 0 21.4-8.8 21.4-21.5 0-12.6-9.3-21.4-21.4-21.4-12.2 0-21.5 8.8-21.5 21.4 0 12.7 9.3 21.5 21.5 21.5zm48.2-3.2h29.8v-57.8h35.2c29 0 50.6-19 50.6-48.6v-3.1c0-29.6-20.7-48.6-50.6-48.6h-65zm29.8-84.9v-46.1h32.3c14.2 0 23.7 8.4 23.7 21.9v2.3c0 13.5-9.7 21.9-23.7 21.9zm106.2 84.9h29.8v-59.6h41.6c8.8 0 12.2 5 12.2 12.2v47.4h29.8v-51.7c0-12.7-7-20.8-19-21.5v-4c13.3-5.4 23.5-17 23.5-35.9v-2.7c0-25.6-19.7-42.3-49.2-42.3h-68.7zm29.8-86.7v-44.3h35.7c14.4 0 22.6 8.4 22.6 21v2.3c0 12.6-8.6 21-22.6 21zm174.6 89.9c39.8 0 65.1-22.6 65.1-63.3v-37.9c0-40.6-25.3-63.2-65.1-63.2-39.7 0-65 22.6-65 63.2v37.9c0 40.7 25.3 63.3 65 63.3zm0-26.7c-22.1 0-35.2-14-35.2-35.7v-39.7c0-21.7 13.1-35.7 35.2-35.7 22.1 0 35.2 14 35.2 35.7v39.7c0 21.7-13.1 35.7-35.2 35.7z"/><path fill="#1a2238" d="m745.8 575.4h149.4v-34.8h-149.4z"/></svg>
@@ -472,34 +508,50 @@ footer code{font-family:var(--font-mono);font-size:12px}
   // s: done | doing | blocked | todo | opt   ·   act = horas reales gastadas   ·   est = horas estimadas restantes
   // d: detalle en HTML corto (ids, rutas, salidas de comandos). Las tareas 'opt' no cuentan para el %.
   const PHASES = [
-    {id:'F0', name:'{{Nombre de la fase}}', sub:'{{qué agrupa}}', tasks:[
-      {n:'{{Tarea cerrada}}', s:'done', act:0.2, d:'{{Evidencia: id, ruta, salida.}}'},
-      {n:'{{Tarea en curso}}', s:'doing', est:1.5, d:'{{Qué falta exactamente.}}'},
-      {n:'{{Tarea bloqueada}}', s:'blocked', est:1, d:'{{Quién o qué la destraba.}}'},
-      {n:'{{Tarea pendiente}}', s:'todo', est:2, d:'{{Alcance.}}'},
-      {n:'{{Mejora opcional}}', s:'opt', est:1, d:'{{No cuenta para el porcentaje.}}'},
+    {id:'F0', name:'Base y accesos', sub:'repos, CI, credenciales, entornos', tasks:[
+      {n:'Repo del servicio con CI verde', s:'done', act:1.5, d:'Pipeline <code>build-test-lint</code> en 2m14s. Cobertura 71 %.'},
+      {n:'Credenciales federadas (sin secretos)', s:'done', act:1.2, d:'OIDC contra el proveedor; sin client secret en variables.'},
+      {n:'Entorno de staging con aprobación', s:'done', act:0.9, d:'Check humano obligatorio antes de cada deploy.'},
+    ]},
+    {id:'F1', name:'Extraer el checkout', sub:'sacar el módulo del monolito sin cortar tráfico', tasks:[
+      {n:'Contrato del API congelado', s:'done', act:2.8, d:'OpenAPI 3.1 revisado con el equipo de front. 14 endpoints.'},
+      {n:'Doble escritura monolito → servicio', s:'doing', act:1.5, est:2.5, d:'Escribe en ambos; falta la reconciliación nocturna y su alerta.'},
+      {n:'Migrar el histórico (3,4 M filas)', s:'blocked', act:0.4, est:3, d:'Necesita la ventana de mantenimiento del sábado. Pendiente de operaciones.'},
+      {n:'Cortar lectura al servicio', s:'todo', est:2, d:'Feature flag por porcentaje, 5 % → 100 % en tres pasos.'},
+      {n:'Caché de catálogo en el borde', s:'opt', est:1.5, d:'Mejora de latencia, no bloquea el corte.'},
+    ]},
+    {id:'F2', name:'Observabilidad y corte', sub:'métricas, alertas, apagar el camino viejo', tasks:[
+      {n:'Trazas distribuidas end-to-end', s:'todo', est:2, d:'Propagación de contexto entre monolito y servicio.'},
+      {n:'Alertas de tasa de error y p95', s:'todo', est:1, d:'Umbrales acordados: 1 % de error, p95 400 ms.'},
+      {n:'Apagar el módulo del monolito', s:'todo', est:1.5, d:'Borrar código muerto y su tabla tras 14 días estable.'},
     ]},
   ];
-  // Bloques reales de sesión (cortando pausas > 20 min). k: on (horario normal) | late (nocturno) | cut (interrumpido)
   const SESSIONS = [
-    {label:'{{lun 24-ago}}', date:'2026-08-24', blocks:[{s:'19:52', e:'22:50', k:'late', t:'{{qué se hizo}}'}]},
+    {label:'lun 18-ago', date:'2026-08-18', blocks:[{s:'09:10', e:'11:40', k:'on', t:'contrato del API y revisión con front'}]},
+    {label:'mar 19-ago', date:'2026-08-19', blocks:[{s:'09:00', e:'10:30', k:'on', t:'CI y credenciales federadas'},{s:'21:15', e:'22:50', k:'late', t:'doble escritura, primera versión'}]},
+    {label:'mié 20-ago', date:'2026-08-20', blocks:[{s:'08:50', e:'09:20', k:'cut', t:'interrumpido por incidente en producción'},{s:'14:00', e:'16:10', k:'on', t:'staging con aprobación y pruebas de humo'}]},
   ];
-  // Costos incrementales: SOLO lo nuevo. lo/hi = rango mensual en USD.
   const COSTS = [
-    {n:'{{Recurso}}', sub:'{{SKU · supuesto de consumo}}', lo:0, hi:0},
+    {n:'Cómputo del servicio', sub:'2 réplicas · 0,5 vCPU · 1 GiB', lo:38, hi:72},
+    {n:'Base de datos gestionada', sub:'instancia chica con réplica de lectura', lo:95, hi:140},
+    {n:'Logs y trazas', sub:'ingesta ~4 GB/día · retención 30 días', lo:60, hi:210},
+    {n:'Balanceador y salida', sub:'tráfico estimado 300 GB/mes', lo:22, hi:45},
   ];
-  const COST_NOTE = '{{Qué queda fuera del total y por qué (costos de una sola vez, recursos que ya se pagaban).}}';
-  // Gantt: barras de trabajo YA hecho (verde). Las azules se proyectan solas desde PHASES.
+  const COST_NOTE = 'Fuera del total: el clúster y el registro de imágenes, que ya se pagaban. Sin costos de una sola vez.';
   const DONE_BARS = [
-    {name:'{{Plan + exploración}}', s:'2026-08-24', e:'2026-08-24'},
+    {name:'F0 · base y accesos', s:'2026-08-18', e:'2026-08-19'},
+    {name:'Contrato del API + doble escritura', s:'2026-08-19', e:'2026-08-20'},
   ];
-  const TODAY = '{{AAAA-MM-DD}}';                 // línea roja del Gantt
-  const PHASE_ORDER = PHASES.map(p=>p.id);        // orden de proyección; ajústalo si el plan no es secuencial
-  const EVAL_RECO = [                             // recomendaciones de ritmo (HTML corto)
-    '<b>{{Un bloque fijo de N h al día}}</b>: {{consecuencia con lo pendiente}}.',
+  const TODAY = '2026-08-21';
+  const PHASE_ORDER = ['F1','F2'];
+  const EVAL_RECO = [
+    '<b>Un bloque fijo de 2 h en la mañana</b>: con 10 h pendientes y 30 % de buffer, el cierre cae en la primera semana de septiembre.',
+    'Agrupar al inicio del bloque todo lo que necesita aprobación humana (ventana de mantenimiento, deploy a staging) para que el resto corra sin frenos.',
+    'Evitar los bloques después de las 21:00: el del 19-ago dejó la reconciliación a medias y costó una revisión extra al día siguiente.',
   ];
-  const EVAL_EXTRA = [                            // observaciones cualitativas del ritmo, con evidencia
-    '{{Qué bloque rindió más y por qué — con hora y resultado, no impresión.}}',
+  const EVAL_EXTRA = [
+    'El bloque 09:10–11:40 del 18-ago cerró el contrato del API completo: los bloques largos y sin interrupción rinden más que la suma de los cortos.',
+    'El bloque de 30 min del 20-ago se fue en recuperar contexto tras el incidente; no cerró ninguna tarea.',
   ];
 
   // ---------- helpers ----------
@@ -668,3 +720,6 @@ footer code{font-family:var(--font-mono);font-size:12px}
   setTimeout(renderMeters,150);
 })();
 </script>
+
+</body>
+</html>

@@ -30,6 +30,35 @@ Le pides el estado de un proyecto y publica una página con:
 
 Todo se calcula desde un único bloque de datos. No hay números escritos a mano en el HTML.
 
+## Cómo se ve
+
+Las capturas salen de [`demo/index.html`](demo/index.html), un tablero completo de un proyecto ficticio — "sacar el checkout de un monolito". Ábrelo en el navegador para tocar los controles: el Gantt es un simulador.
+
+![Encabezado, medidores y dónde vamos](docs/img/hero-dark.webp)
+
+*Arriba: los cuatro medidores y las tres columnas de estado. Todo se calcula desde un único bloque de datos.*
+
+![Diagrama de arquitectura con estado por componente](docs/img/diagrama-dark.webp)
+
+*El diagrama no ilustra: informa. Verde encendido con evidencia, ámbar parcial, punteado apagado, y paquetes viajando solo por las conexiones vivas. El toggle "Meta" enciende todo para mostrar hacia dónde va el proyecto.*
+
+![Backlog por fases con horas](docs/img/backlog-dark.webp)
+
+*La fase con trabajo vivo se abre sola y se marca en rojo. Cada tarea declara horas gastadas y horas restantes.*
+
+![Carta Gantt simulable](docs/img/gantt-dark.webp)
+
+*Verde lo hecho, azul la proyección, el tramo claro el buffer. Cambia horas por día y la fecha de cierre se mueve.*
+
+<details>
+<summary>Tema claro y costos</summary>
+
+![El mismo tablero en tema claro](docs/img/hero-light.webp)
+
+![Costos incrementales y horas](docs/img/costos-dark.webp)
+
+</details>
+
 ## Por qué existe
 
 Un estado de proyecto suele ser una lista de bullets que envejece el mismo día. Este formato apuesta por lo contrario: cada afirmación lleva su evidencia (id de run, ruta, salida de comando), cada hora es de sesión real y no de reloj de pipeline, y el plan es un simulador — si el ritmo cambia, la fecha cambia a la vista de todos.
@@ -55,12 +84,14 @@ ln -s "$PWD/tablero/skills/tablero" ~/.claude/skills/tablero
 ## Uso
 
 ```
-/tablero
+/tablero              # genera el HTML local y te dice la ruta
+/tablero publicar     # además lo publica como artefacto
+/tablero <url>        # actualiza un tablero ya publicado, sobre la misma URL
 ```
 
 O simplemente pídelo: *"hazme el tablero de este proyecto"*, *"¿dónde vamos con la migración?"*.
 
-Para actualizarlo, vuelve a pedirlo: republica sobre la misma URL en vez de crear una segunda.
+Por defecto **no publica nada**: deja un archivo autocontenido que abres en el navegador. Publicar es una acción hacia afuera y se pide. Al actualizar, republica sobre la misma URL en vez de crear una segunda.
 
 ## Personalizar
 
@@ -82,7 +113,8 @@ skills/tablero/
 ├── SKILL.md                    # contrato de activación y reglas duras
 ├── assets/
 │   ├── template.html           # el formato: CSS, estructura y motor de render
-│   └── logo.svg                # slot de marca
+│   ├── local-wrapper.html      # envoltorio html/head/body para el archivo local
+│   └── logo.svg                # marca del footer
 └── references/
     ├── data-contract.md        # forma de los datos y métricas derivadas
     ├── sections.md             # catálogo de secciones y reglas del diagrama

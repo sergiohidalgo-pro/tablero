@@ -174,9 +174,9 @@ section{margin-bottom:48px}
 .diagram text.h{font-weight:600;font-size:12.5px}
 .diagram .zone{fill:color-mix(in srgb,var(--surface-2) 70%,transparent);stroke:var(--line-strong);stroke-width:1;stroke-dasharray:4 3}
 .diagram .ext{fill:var(--surface-2);stroke:var(--line-strong);stroke-width:1.5}
-.diagram g[data-s]{transition:opacity .5s;transition-delay:calc(var(--i,0)*70ms)}
-.diagram g[data-s] .box{fill:var(--surface);stroke-width:2;transition:stroke .5s,filter .5s,fill .5s;transition-delay:calc(var(--i,0)*70ms)}
-.diagram g[data-s] .led{transition:fill .5s,filter .5s;transition-delay:calc(var(--i,0)*70ms)}
+.diagram g[data-s]{transition:opacity .38s;transition-delay:calc(var(--i,0)*45ms)}
+.diagram g[data-s] .box{fill:var(--surface);stroke-width:2;transition:stroke .38s,filter .38s,fill .38s;transition-delay:calc(var(--i,0)*45ms)}
+.diagram g[data-s] .led{transition:fill .38s,filter .38s;transition-delay:calc(var(--i,0)*45ms)}
 /* ON */
 .diagram g[data-s="done"] .box{stroke:var(--on);filter:drop-shadow(0 0 8px var(--on-glow))}
 .diagram g[data-s="done"] .led{fill:var(--on);filter:drop-shadow(0 0 5px var(--on-glow))}
@@ -195,14 +195,30 @@ section{margin-bottom:48px}
 .diagram .pkt{fill:var(--on);display:none}
 .diagram .pkt.warn{fill:var(--warn)}
 .diagram .pkt.show{display:block}
-/* META: everything lit in accent, staggered */
+/* META: todo encendido en acento, escalonado.
+   Ojo con la especificidad: .diagram .edge.live[data-s] pesa más que .diagram.meta .edge,
+   por eso las reglas de meta repiten el selector completo o los marcadores ámbar sobreviven. */
 .diagram.meta g[data-s]{opacity:1}
 .diagram.meta g[data-s] .box{stroke:var(--accent);stroke-dasharray:none;fill:var(--surface);filter:drop-shadow(0 0 8px var(--accent-glow))}
 .diagram.meta g[data-s] text{fill:var(--ink)}
 .diagram.meta g[data-s] .led{fill:var(--accent);stroke:none;filter:drop-shadow(0 0 5px var(--accent-glow));animation:none}
-.diagram.meta .edge{stroke:var(--accent);marker-end:url(#arr-accent);opacity:1;stroke-dasharray:6 6;animation:flow 1.1s linear infinite;filter:drop-shadow(0 0 4px var(--accent-glow))}
-.diagram.meta .pkt{display:block;fill:var(--accent)}
+.diagram.meta .edge,.diagram.meta .edge.live[data-s="doing"]{stroke:var(--accent);marker-end:url(#arr-accent);opacity:1;stroke-dasharray:6 6;animation:flow 1.1s linear infinite;filter:drop-shadow(0 0 4px var(--accent-glow))}
+.diagram.meta .pkt,.diagram.meta .pkt.warn{display:block;fill:var(--accent)}
 @media (prefers-reduced-motion: reduce){.diagram .pkt{display:none!important}}
+/* cajas consultables: clic o Enter abren el detalle bajo el diagrama */
+.diagram g[data-info]{cursor:pointer}
+.diagram g[data-info] .box{transition:stroke .38s,filter .38s,fill .38s,stroke-width .18s}
+.diagram g[data-info]:hover .box{stroke-width:3.2}
+.diagram g[data-info].sel .box{stroke-width:3.6}
+.diagram g[data-info]:focus{outline:none}
+.diagram g[data-info]:focus-visible .box{stroke-width:3.6;stroke-dasharray:none}
+.info{margin-top:10px;padding:14px 18px;border-left:3px solid var(--line-strong);transition:border-color .25s}
+.info.on{border-left-color:var(--accent)}
+.info .i-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.info h4{font-family:var(--font-display);font-size:15.5px;font-weight:600;margin:0}
+.info p{margin:0;color:var(--muted);font-size:13.5px;max-width:92ch}
+.info .hint{color:var(--faint);font-size:13px}
+.info code{font-family:var(--font-mono);font-size:12px;background:var(--surface-2);padding:1px 5px;border-radius:4px;color:var(--ink)}
 .comp{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}
 .comp th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
 .comp td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -383,40 +399,50 @@ footer code{font-family:var(--font-mono);font-size:12px}
          done/doing se animan con paquetes; todo queda punteada y apagada.
        · Zonas (clúster, VPC, cuenta) con <rect class="zone">; lo que no cambia, con <rect class="ext">.
        · viewBox ancho (1100x560 típico); min-width:760px lo hace scrollear en móvil sin romperse. -->
-  <svg viewBox="0 0 1100 520" role="img" aria-label="Diagrama del checkout: monolito, servicio nuevo y sus datos, con el estado de cada pieza">
+  <svg viewBox="0 0 1100 600" role="img" aria-label="Diagrama del checkout: monolito, servicio nuevo y sus datos, con el estado de cada pieza">
     <defs>
       <marker id="arr-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--on)"/></marker>
       <marker id="arr-warn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--warn)"/></marker>
       <marker id="arr-off" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--off)"/></marker>
       <marker id="arr-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
     </defs>
-    <rect class="zone" x="250" y="20" width="360" height="470" rx="12"/>
-    <text x="270" y="46" class="h">monolito (hoy)</text><text x="270" y="62" class="t">un despliegue · una base de datos</text>
-    <rect class="zone" x="650" y="20" width="380" height="470" rx="12"/>
-    <text x="670" y="46" class="h">servicios (nuevo)</text><text x="670" y="62" class="t">despliegue propio · base propia</text>
 
-    <path id="e1" class="edge" data-s="done" d="M212 96H262"/>
-    <path id="e2" class="edge" data-s="doing" d="M430 146V166"/>
-    <path id="e3" class="edge" data-s="done" d="M592 98H662"/>
-    <path id="e4" class="edge" data-s="done" d="M430 246V286"/>
-    <path id="e5" class="edge" data-s="doing" d="M592 198H662"/>
-    <path id="e6" class="edge" data-s="doing" d="M840 246V286"/>
-    <path id="e7" class="edge" data-s="todo" d="M592 318H662"/>
-    <path id="e9" class="edge" data-s="done" d="M212 316H262"/>
+    <rect class="zone" x="250" y="24" width="360" height="548" rx="12"/>
+    <text x="272" y="52" class="h">monolito (hoy)</text><text x="272" y="70" class="t">un despliegue · una base de datos</text>
+    <rect class="zone" x="650" y="24" width="380" height="548" rx="12"/>
+    <text x="672" y="52" class="h">servicios (nuevo)</text><text x="672" y="70" class="t">despliegue propio · base propia</text>
 
-    <rect class="ext" x="30" y="70" width="180" height="52" rx="8"/><text x="120" y="92" text-anchor="middle" class="h">Clientes web y móvil</text><text x="120" y="108" text-anchor="middle" class="t">sin cambios de contrato</text>
-    <rect class="ext" x="30" y="290" width="180" height="52" rx="8"/><text x="120" y="312" text-anchor="middle" class="h">Pasarela de pagos</text><text x="120" y="328" text-anchor="middle" class="t">no se toca en esta fase</text>
+    <path id="e1" class="edge" data-s="done"  d="M212 124H264"/>
+    <path id="e2" class="edge" data-s="doing" d="M430 158V206"/>
+    <path id="e3" class="edge" data-s="done"  d="M590 124H664"/>
+    <path id="e4" class="edge" data-s="done"  d="M430 278V326"/>
+    <path id="e5" class="edge" data-s="doing" d="M590 244H664"/>
+    <path id="e6" class="edge" data-s="doing" d="M840 158V206"/>
+    <path id="e7" class="edge" data-s="doing" d="M840 278V326"/>
+    <path id="e8" class="edge" data-s="todo"  d="M590 364H664"/>
+    <path id="e9" class="edge" data-s="done"  d="M212 244H264"/>
 
-    <g data-s="doing"><rect class="box" x="270" y="70" width="320" height="56" rx="7"/><text x="430" y="92" text-anchor="middle" class="h">Router de tráfico</text><text x="430" y="110" text-anchor="middle" class="t">feature flag · 5 % al servicio nuevo</text></g>
-    <g data-s="doing"><rect class="box" x="270" y="170" width="320" height="56" rx="7"/><text x="430" y="192" text-anchor="middle" class="h">Módulo de checkout</text><text x="430" y="210" text-anchor="middle" class="t">se apaga tras 14 días estable</text></g>
-    <g data-s="done"><rect class="box" x="270" y="290" width="320" height="56" rx="7"/><text x="430" y="312" text-anchor="middle" class="h">Base de datos principal</text><text x="430" y="330" text-anchor="middle" class="t">3,4 M filas por migrar</text></g>
+    <rect class="ext" x="30" y="96" width="180" height="56" rx="8"/><text x="120" y="120" text-anchor="middle" class="h">Clientes web y móvil</text><text x="120" y="138" text-anchor="middle" class="t">sin cambios de contrato</text>
+    <rect class="ext" x="30" y="216" width="180" height="56" rx="8"/><text x="120" y="240" text-anchor="middle" class="h">Pasarela de pagos</text><text x="120" y="258" text-anchor="middle" class="t">no se toca en esta fase</text>
 
-    <g data-s="done"><rect class="box" x="670" y="70" width="340" height="56" rx="7"/><text x="840" y="92" text-anchor="middle" class="h">API de checkout</text><text x="840" y="110" text-anchor="middle" class="t">2/2 réplicas · p95 210 ms</text></g>
-    <g data-s="doing"><rect class="box" x="670" y="170" width="340" height="56" rx="7"/><text x="840" y="192" text-anchor="middle" class="h">Doble escritura y reconciliación</text><text x="840" y="210" text-anchor="middle" class="t">escribe en ambos · falta el job nocturno</text></g>
-    <g data-s="done"><rect class="box" x="670" y="290" width="340" height="56" rx="7"/><text x="840" y="312" text-anchor="middle" class="h">Base de datos de checkout</text><text x="840" y="330" text-anchor="middle" class="t">instancia chica + réplica de lectura</text></g>
-    <g data-s="todo"><rect class="box" x="670" y="390" width="340" height="56" rx="7"/><text x="840" y="412" text-anchor="middle" class="h">Trazas y alertas</text><text x="840" y="430" text-anchor="middle" class="t">p95 400 ms · 1 % de error</text></g>
+    <g data-s="doing" data-title="Router de tráfico" data-info="Decide qué porcentaje del checkout atiende el servicio nuevo. Hoy está en <code>5 %</code>: el resto sigue entrando al monolito. Los saltos a 50 % y 100 % quedan bloqueados hasta que el histórico esté migrado, porque un usuario que compró antes de la migración no encontraría su pedido en el servicio nuevo.">
+      <rect class="box" x="272" y="92" width="316" height="64" rx="7"/><text x="430" y="118" text-anchor="middle" class="h">Router de tráfico</text><text x="430" y="136" text-anchor="middle" class="t">feature flag · 5 % al servicio nuevo</text></g>
+    <g data-s="doing" data-title="Módulo de checkout (monolito)" data-info="El código original. Sigue siendo la fuente de verdad para el 95 % del tráfico y para todo el histórico. Se apaga —y se borra, junto con su tabla— recién 14 días después de que el corte esté al 100 % sin incidentes.">
+      <rect class="box" x="272" y="212" width="316" height="64" rx="7"/><text x="430" y="238" text-anchor="middle" class="h">Módulo de checkout</text><text x="430" y="256" text-anchor="middle" class="t">se apaga tras 14 días estable</text></g>
+    <g data-s="done" data-title="Base de datos principal" data-info="La base del monolito. Guarda las 3,4 M de filas de checkout que faltan migrar. La migración necesita la ventana de mantenimiento del sábado: copiarlas en caliente dejaría inconsistencias con la doble escritura.">
+      <rect class="box" x="272" y="332" width="316" height="64" rx="7"/><text x="430" y="358" text-anchor="middle" class="h">Base de datos principal</text><text x="430" y="376" text-anchor="middle" class="t">3,4 M filas por migrar</text></g>
+
+    <g data-s="done" data-title="API de checkout" data-info="El servicio nuevo, con su contrato <code>OpenAPI 3.1</code> congelado y revisado con el equipo de front. Dos réplicas, p95 de 210 ms medido en una hora de tráfico espejo. Despliega solo, con aprobación humana antes de staging.">
+      <rect class="box" x="672" y="92" width="336" height="64" rx="7"/><text x="840" y="118" text-anchor="middle" class="h">API de checkout</text><text x="840" y="136" text-anchor="middle" class="t">2/2 réplicas · p95 210 ms</text></g>
+    <g data-s="doing" data-title="Doble escritura y reconciliación" data-info="Toda escritura va al monolito y al servicio a la vez, para que las dos bases queden iguales durante la transición. Falta el job nocturno que compara ambos lados y su alerta: hoy, si el servicio falla de madrugada, nadie se entera hasta la mañana. Ese es el bloqueo real de la fase.">
+      <rect class="box" x="672" y="212" width="336" height="64" rx="7"/><text x="840" y="238" text-anchor="middle" class="h">Doble escritura y reconciliación</text><text x="840" y="256" text-anchor="middle" class="t">escribe en ambos · falta el job nocturno</text></g>
+    <g data-s="done" data-title="Base de datos de checkout" data-info="Base propia del servicio: instancia chica con una réplica de lectura. Respaldo diario verificado el 20-ago. Recibe las escrituras nuevas desde el 19-ago; le falta el histórico.">
+      <rect class="box" x="672" y="332" width="336" height="64" rx="7"/><text x="840" y="358" text-anchor="middle" class="h">Base de datos de checkout</text><text x="840" y="376" text-anchor="middle" class="t">instancia chica + réplica de lectura</text></g>
+    <g data-s="todo" data-title="Trazas y alertas" data-info="Fase 2. Propagación de contexto entre monolito y servicio para poder seguir una compra completa, más alertas de p95 sobre 400 ms y tasa de error sobre 1 %. Sin esto no se sube el corte del 5 %: no habría cómo ver que algo se rompió.">
+      <rect class="box" x="672" y="452" width="336" height="64" rx="7"/><text x="840" y="478" text-anchor="middle" class="h">Trazas y alertas</text><text x="840" y="496" text-anchor="middle" class="t">p95 400 ms · 1 % de error</text></g>
   </svg>
   </div>
+  <div class="card info" id="diagram-info" role="status" aria-live="polite"><p class="hint">Toca un componente del diagrama para ver qué es y en qué estado está.</p></div>
   <div class="tblwrap"><table class="comp">
     <thead><tr><th>Componente</th><th>Estado</th><th>Evidencia</th></tr></thead>
     <tbody>
@@ -683,25 +709,47 @@ footer code{font-family:var(--font-mono);font-size:12px}
   function decorateDiagram(){
     const svg=$('#diagram svg');
     // stagger index for power-on
-    svg.querySelectorAll('g[data-s]').forEach((g,i)=>{g.style.setProperty('--i',i);
+    svg.querySelectorAll('g[data-s]').forEach((g,i)=>{g.style.setProperty('--i',i); g.dataset.i0=i;
       const r=g.querySelector('rect.box'); const led=document.createElementNS(NS,'circle'); led.setAttribute('class','led'); led.setAttribute('r','4');
       led.setAttribute('cx',(+r.getAttribute('x'))+(+r.getAttribute('width'))-10); led.setAttribute('cy',(+r.getAttribute('y'))+10); g.appendChild(led);});
     // packets on edges
     svg.querySelectorAll('path.edge').forEach((p,i)=>{ const s=p.dataset.s; if(s==='done'||s==='doing') p.classList.add('live');
-      const len=p.getTotalLength(); const dur=Math.max(1.2,len/70).toFixed(2);
-      for(let k=0;k<2;k++){ const c=document.createElementNS(NS,'circle'); c.setAttribute('r','3'); c.setAttribute('class','pkt'+(s==='doing'?' warn':'')); c.dataset.s=s;
-        const am=document.createElementNS(NS,'animateMotion'); am.setAttribute('dur',dur+'s'); am.setAttribute('repeatCount','indefinite'); am.setAttribute('begin',(k*dur/2)+'s');
+      const len=p.getTotalLength();
+      // dos paquetes en una arista corta se ven como un parpadeo, no como un flujo
+      const n=len<90?1:2, dur=Math.max(1.6,len/70).toFixed(2);
+      for(let k=0;k<n;k++){ const c=document.createElementNS(NS,'circle'); c.setAttribute('r','3'); c.setAttribute('class','pkt'+(s==='doing'?' warn':'')); c.dataset.s=s;
+        const am=document.createElementNS(NS,'animateMotion'); am.setAttribute('dur',dur+'s'); am.setAttribute('repeatCount','indefinite'); am.setAttribute('begin',(k*dur/n)+'s');
         const mp=document.createElementNS(NS,'mpath'); mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#'+p.id); mp.setAttribute('href','#'+p.id); am.appendChild(mp); c.appendChild(am); svg.appendChild(c); } });
     updatePackets(false);
     if(REDUCED&&svg.pauseAnimations)svg.pauseAnimations();
   }
   function updatePackets(meta){ document.querySelectorAll('#diagram .pkt').forEach(c=>{ const on=meta||c.dataset.s==='done'||c.dataset.s==='doing'; c.classList.toggle('show',on&&!REDUCED); }); }
-  function setView(meta){ const d=$('#diagram'); if(meta&&!d.classList.contains('meta')){ // power-on sequence: reorder stagger by y position
-      const gs=[...d.querySelectorAll('g[data-s]')].sort((a,b)=>(+a.querySelector('rect').getAttribute('y'))-(+b.querySelector('rect').getAttribute('y'))); gs.forEach((g,i)=>g.style.setProperty('--i',i)); }
+  function setView(meta){ const d=$('#diagram');
+    // "Meta" enciende de arriba hacia abajo; "Hoy" vuelve al orden del documento.
+    // Sin restaurar --i, el escalonado quedaba invertido y las cajas saltaban al alternar.
+    const gs=[...d.querySelectorAll('g[data-s]')];
+    if(meta){ gs.slice().sort((a,b)=>(+a.querySelector('rect').getAttribute('y'))-(+b.querySelector('rect').getAttribute('y'))).forEach((g,i)=>g.style.setProperty('--i',i)) }
+    else { gs.forEach(g=>g.style.setProperty('--i',g.dataset.i0||0)) }
     d.classList.toggle('meta',meta); updatePackets(meta);
     $('#v-hoy').setAttribute('aria-pressed',String(!meta)); $('#v-meta').setAttribute('aria-pressed',String(meta)); store('view',meta?'meta':'hoy'); }
   $('#v-hoy').addEventListener('click',()=>setView(false));
   $('#v-meta').addEventListener('click',()=>setView(true));
+
+  // ---------- diagram: detalle por componente ----------
+  function wireBoxes(){
+    const box=$('#diagram-info'); if(!box)return;
+    const gs=[...document.querySelectorAll('#diagram g[data-s]')].filter(g=>g.dataset.info);
+    if(!gs.length){box.style.display='none';return}
+    gs.forEach(g=>{
+      const name=g.dataset.title||(g.querySelector('text.h')||{}).textContent||'componente';
+      g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('aria-label',name+': ver detalle');
+      const open=()=>{ gs.forEach(x=>x.classList.toggle('sel',x===g));
+        box.classList.add('on');
+        box.innerHTML='<div class="i-head"><span class="chip '+g.dataset.s+'">'+SLABEL[g.dataset.s]+'</span><h4>'+name+'</h4></div><p>'+g.dataset.info+'</p>'; };
+      g.addEventListener('click',open);
+      g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open()} });
+    });
+  }
 
   // ---------- reveal on scroll + nav highlight ----------
   function observe(){
@@ -726,14 +774,18 @@ footer code{font-family:var(--font-mono);font-size:12px}
     const dia=$('#diagram'), svg=$('#diagram svg');
     const io=new IntersectionObserver(es=>es.forEach(e=>{
       e.target.classList.toggle('anim-off',!e.isIntersecting);
-      if(e.target===dia&&svg&&svg.pauseAnimations&&!REDUCED){e.isIntersecting?svg.unpauseAnimations():svg.pauseAnimations()}
-    }),{rootMargin:'120px 0px'});
+      if(e.target===dia&&svg&&svg.pauseAnimations&&!REDUCED){
+        // reanudar sin más deja SMIL desfasado del CSS y los paquetes pegan un salto:
+        // se reinicia el reloj para que todos vuelvan a entrar juntos
+        if(e.isIntersecting){svg.unpauseAnimations();if(svg.setCurrentTime)svg.setCurrentTime(0)}else{svg.pauseAnimations()}
+      }
+    }),{rootMargin:'300px 0px'});
     ['#diagram','.band','header.top','#phases','#gantt-box','#days-chart'].forEach(sel=>{const el=document.querySelector(sel);if(el)io.observe(el)});
   }
 
   // ---------- init ----------
   ['hpd','days','start','blockstart','buffer','rate'].forEach(id=>{const el=$('#'+id);const v=load(id,null);if(v!==null)el.value=v;el.addEventListener('input',()=>{store(id,el.value);renderMeters();renderGantt()})});
-  decorateDiagram(); if(load('view','hoy')==='meta')setView(true);
+  decorateDiagram(); wireBoxes(); if(load('view','hoy')==='meta')setView(true);
   renderPhases(); renderGantt(); observe(); idle();
   setTimeout(renderMeters,150);
 })();

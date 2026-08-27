@@ -23,7 +23,7 @@ Le pides el estado de un proyecto y publica una página con:
 
 - **Cuatro medidores** arriba: avance por esfuerzo y por tareas, horas hechas, horas por hacer con buffer, y el foco o bloqueo del momento.
 - **Dónde vamos** en tres columnas: encendido · bloqueado · apagado, y la acción concreta que sigue.
-- **Un diagrama** donde cada componente está literalmente encendido, parcial o apagado, con paquetes viajando por las conexiones vivas — y un toggle *Meta* que enciende todo para mostrar hacia dónde va.
+- **Un diagrama** donde cada componente está literalmente encendido, parcial o apagado, con paquetes viajando por las conexiones vivas. Cada caja se puede tocar para leer qué es y por qué está así, y un toggle *Meta* enciende todo para mostrar hacia dónde va.
 - **Backlog** en fases plegables, con horas hechas y estimadas por tarea.
 - **Costos** incrementales, con rango bajo/alto y la palanca que domina la factura.
 - **Carta Gantt simulable**: el lector mueve horas por día, días hábiles y fecha de inicio, y ve moverse la fecha de cierre.
@@ -43,7 +43,7 @@ Las capturas de abajo salen de ahí.
 
 ![Diagrama de arquitectura con estado por componente](docs/img/diagrama-dark.webp)
 
-*El diagrama no ilustra: informa. Verde encendido con evidencia, ámbar parcial, punteado apagado, y paquetes viajando solo por las conexiones vivas. El toggle "Meta" enciende todo para mostrar hacia dónde va el proyecto.*
+*El diagrama no ilustra: informa. Verde encendido con evidencia, ámbar parcial, punteado apagado, y paquetes viajando solo por las conexiones vivas. Toca cualquier caja —o llega con el tabulador y pulsa Enter— y abajo se explica qué es y por qué está en ese estado. El toggle "Meta" enciende todo para mostrar hacia dónde va el proyecto.*
 
 ![Backlog por fases con horas](docs/img/backlog-dark.webp)
 

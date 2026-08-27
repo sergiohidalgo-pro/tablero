@@ -30,7 +30,9 @@ Diagrama SVG con estado por componente y toggle **Hoy / Meta**. Reglas:
 - Aristas **antes** de los nodos: `<path id="eN" class="edge" data-s="…" d="…"/>`. `done` y `doing` reciben paquetes animados; `todo` queda punteada.
 - Zonas lógicas con `<rect class="zone">`; lo que no cambia con `<rect class="ext">` (sin estado, sin LED).
 - `viewBox` ~1100×560 y `min-width:760px`: en móvil scrollea en su contenedor, la página nunca.
-- La vista **Meta** enciende todo en el color de acento con un barrido de arriba hacia abajo. Es el argumento visual de "hacia dónde vamos"; no la saques.
+- **Aire**: cajas de 64 px de alto con 56 px entre ellas, y al menos 56 px entre la última caja y el borde de la zona. Apretadas se leen como una lista, no como un sistema.
+- **`data-title` + `data-info` en cada `<g>`** hacen la caja consultable: al tocarla (clic, Enter o Espacio) se abre el detalle bajo el diagrama. `data-info` responde qué es y **por qué está en ese estado**, no repite el subtítulo; una o dos frases, con cifras y de qué depende. Sin `data-info`, la caja no es interactiva.
+- La vista **Meta** enciende todo en el color de acento con un barrido de arriba hacia abajo. Es el argumento visual de "hacia dónde vamos"; no la saques. Si agregas reglas de estado, recuerda que `.diagram .edge.live[data-s="doing"]` pesa más que `.diagram.meta .edge`: la regla de meta tiene que repetir el selector completo o el ámbar sobrevive al cambio de vista.
 
 Debajo, tabla `comp` de tres columnas: Componente · Estado (chip) · **Evidencia verificable** (id de run, fecha, salida). Sin adjetivos.
 

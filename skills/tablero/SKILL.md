@@ -51,7 +51,7 @@ Do NOT load for a one-line status answer, a commit log summary, or a plain check
 2. Copy `assets/template.html` to the working file (scratchpad, or where the user asks). For a local file, wrap it with `assets/local-wrapper.html` — the template is a fragment and only the Artifact tool supplies the html/head/body shell.
 3. Fill the `// ---------- data ----------` block only: `PHASES`, `SESSIONS`, `COSTS`, `DONE_BARS`, `TODAY`, `PHASE_ORDER`, `COST_NOTE`, `EVAL_RECO`, `EVAL_EXTRA`. See `references/data-contract.md`.
 4. Replace every `{{...}}` placeholder in the HTML. Search for `{{` and confirm zero matches before publishing.
-5. Adjust the diagram per `references/sections.md`; the LED, packets and power-on view are injected by JS — only author `<g data-s>`, `<path class="edge">`, `<rect class="zone">`.
+5. Adjust the diagram per `references/sections.md`; the LED, packets and power-on view are injected by JS — only author `<g data-s>`, `<path class="edge">`, `<rect class="zone">`. Give every component a `data-title` and a `data-info` explaining what it is and why it sits in that state: that is what the reader gets when tapping the box.
 6. Open the local file to verify it renders before handing it over. Fonts come from Google Fonts and need network; the fallback stack must keep it readable offline.
 7. Only when publishing: use the Artifact tool with a `favicon` stable across redeploys, `title` = short project name, `description` = one line.
 8. Report the file path (or URL), what is estimated and what is verified.

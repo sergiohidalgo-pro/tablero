@@ -21,6 +21,7 @@ Do NOT load for a one-line status answer, a commit log summary, or a plain check
 - Costs are incremental: only what is new. Name the price source and date, and list what is excluded because it was already paid.
 - Never invent qualitative claims about rhythm or productivity. `EVAL_EXTRA` entries need a time and a result.
 - Do not edit the CSS in `assets/template.html`: the palette, typography and motion ARE the format. Extend by adding sections, not by restyling.
+- If you add movement, follow the performance rules in `references/design-system.md`: nothing animates off-screen, nothing that moves carries a `drop-shadow`, and a re-render is not a re-animation.
 - Keep the footer `.brand` block: logo slot + credit line + MIT link.
 - Default output is a LOCAL html file. Publish to claude.ai only when the user asks for it in this session — publishing is an outward action.
 - One artifact per project. To update, republish the same file path (or pass its `url`) — never create a second URL.

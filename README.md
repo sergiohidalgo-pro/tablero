@@ -12,6 +12,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT"></a>
   <img src="https://img.shields.io/badge/Claude%20Code-plugin-5EA2FF" alt="Claude Code plugin">
+  <a href="https://sergiohidalgo-pro.github.io/tablero/demo/"><img src="https://img.shields.io/badge/demo-en%20vivo-00c6a9" alt="Demo en vivo"></a>
 </p>
 
 ---
@@ -32,7 +33,9 @@ Todo se calcula desde un único bloque de datos. No hay números escritos a mano
 
 ## Cómo se ve
 
-Las capturas salen de [`demo/index.html`](demo/index.html), un tablero completo de un proyecto ficticio — "sacar el checkout de un monolito". Ábrelo en el navegador para tocar los controles: el Gantt es un simulador.
+**[Ver la demo en vivo →](https://sergiohidalgo-pro.github.io/tablero/demo/)** — un tablero completo de un proyecto ficticio ("sacar el checkout de un monolito"). Tócalo: el Gantt es un simulador, mueve las horas por día y la fecha de cierre se mueve con ellas.
+
+Las capturas de abajo salen de ahí.
 
 ![Encabezado, medidores y dónde vamos](docs/img/hero-dark.webp)
 

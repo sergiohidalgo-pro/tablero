@@ -42,6 +42,16 @@ Todo número comparable lleva `font-variant-numeric: tabular-nums`. Los `h2` cie
 - Paquetes en las aristas con `animateMotion` sobre el `path` real.
 - `prefers-reduced-motion: reduce` apaga toda animación y transición, y muestra el estado final. Es obligatorio, no opcional.
 
+## Rendimiento del movimiento
+
+El tablero tiene animación infinita por diseño (LEDs, paquetes, escaneo). Estas cinco reglas son las que la mantienen barata; si agregas movimiento, respétalas.
+
+- **Nada anima fuera de pantalla.** `idle()` observa los contenedores animados y les pone `.anim-off` (que fuerza `animation-play-state:paused`); al diagrama además le llama `svg.pauseAnimations()`, porque SMIL sigue corriendo aunque el elemento esté en `display:none`.
+- **La grilla del fondo vive en `body::before` fijo**, no en `background-attachment:fixed`: esa propiedad repinta la página entera en cada scroll.
+- **Nada que se mueva lleva `drop-shadow`.** El filtro se recalcula por frame. Los paquetes van sin glow; el resplandor queda en los elementos quietos (cajas, LEDs).
+- **Con IntersectionObserver no se escucha `scroll`.** El listener por scroll es solo el fallback: medir `getBoundingClientRect` de cada sección en cada scroll es trabajo duplicado.
+- **Re-render no es re-animación.** El Gantt y el ritmo se redibujan con cada tecla del simulador; animan la primera vez (`dataset.drawn`) y después aparecen ya en su estado final. Volver a lanzar la entrada en cada input se ve nervioso y cuesta.
+
 ## Accesibilidad
 
 Foco visible en cada control (`:focus-visible` con outline de acento). El toggle usa `aria-pressed`. El diagrama lleva `role="img"` y un `aria-label` que describe lo que muestra. Contraste verificado en ambos temas: `--muted` sobre `--surface` es el par más ajustado, no lo bajes.

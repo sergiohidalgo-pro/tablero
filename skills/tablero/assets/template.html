@@ -43,8 +43,10 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px;background-attachment:fixed}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+/* la grilla vive en su propia capa fija: evita el repaint por scroll de background-attachment:fixed */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px}
 a{color:var(--accent)}
 h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.12;margin:0;text-wrap:balance}
 h1{font-size:clamp(34px,4.6vw,54px);letter-spacing:-.02em;font-weight:800}
@@ -64,6 +66,8 @@ p{margin:0 0 10px;max-width:70ch}
 @keyframes flow{to{stroke-dashoffset:-24}}
 @keyframes glowin{from{box-shadow:0 0 0 0 var(--on-glow)}to{box-shadow:0 0 0 12px transparent}}
 @keyframes scan{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
+/* nada anima fuera de pantalla: lo aplica el observer de idle() */
+.anim-off,.anim-off *{animation-play-state:paused!important}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none!important;animation:none!important}
@@ -180,8 +184,8 @@ section{margin-bottom:48px}
 .diagram .edge{stroke:var(--off);stroke-width:2;fill:none;stroke-dasharray:5 5;marker-end:url(#arr-off);opacity:.7;transition:stroke .5s,opacity .5s}
 .diagram .edge.live{stroke:var(--on);marker-end:url(#arr-on);opacity:1;stroke-dasharray:6 6;animation:flow 1.1s linear infinite;filter:drop-shadow(0 0 4px var(--on-glow))}
 .diagram .edge.live[data-s="doing"]{stroke:var(--warn);marker-end:url(#arr-warn);filter:drop-shadow(0 0 4px var(--warn-glow))}
-.diagram .pkt{fill:var(--on);filter:drop-shadow(0 0 5px var(--on-glow));display:none}
-.diagram .pkt.warn{fill:var(--warn);filter:drop-shadow(0 0 5px var(--warn-glow))}
+.diagram .pkt{fill:var(--on);display:none}
+.diagram .pkt.warn{fill:var(--warn)}
 .diagram .pkt.show{display:block}
 /* META: everything lit in accent, staggered */
 .diagram.meta g[data-s]{opacity:1}
@@ -189,7 +193,7 @@ section{margin-bottom:48px}
 .diagram.meta g[data-s] text{fill:var(--ink)}
 .diagram.meta g[data-s] .led{fill:var(--accent);stroke:none;filter:drop-shadow(0 0 5px var(--accent-glow));animation:none}
 .diagram.meta .edge{stroke:var(--accent);marker-end:url(#arr-accent);opacity:1;stroke-dasharray:6 6;animation:flow 1.1s linear infinite;filter:drop-shadow(0 0 4px var(--accent-glow))}
-.diagram.meta .pkt{display:block;fill:var(--accent);filter:drop-shadow(0 0 5px var(--accent-glow))}
+.diagram.meta .pkt{display:block;fill:var(--accent)}
 @media (prefers-reduced-motion: reduce){.diagram .pkt{display:none!important}}
 .comp{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}
 .comp th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
@@ -543,7 +547,7 @@ footer code{font-family:var(--font-mono);font-size:12px}
     $('#ring-e').style.strokeDashoffset=(314.16*(1-pctE/100)).toFixed(2);
     $('#ring-t').style.strokeDashoffset=(251.33*(1-pctT/100)).toFixed(2);
     countTo($('#ring-pct'),pctE,v=>Math.round(v)+'%',1300);
-    $('#k-effort').textContent=pctE+' %'; $('#k-tasks').textContent=`${T.done} / ${T.count}`;
+    countTo($('#k-effort'),pctE,v=>Math.round(v)+' %',1300); $('#k-tasks').textContent=`${T.done} / ${T.count}`;
     $('#k-foot').textContent=`${fmt1(T.actual)} h de ${fmt1(totalH)} h · ${pctT} % de tareas`;
     countTo($('#m-actual'),T.actual,v=>fmt1(v),1100); $('#m-actual-bar').style.width=pctE+'%';
     countTo($('#m-left'),T.estBuf,v=>fmt1(v),1100); $('#m-left-bar').style.width=(100-pctE)+'%';
@@ -596,7 +600,8 @@ footer code{font-family:var(--font-mono);font-size:12px}
         if(r.e>r.dryEnd)svg+=`<rect class="buffer bar-a" style="transition-delay:${i*90+200}ms" x="${x(addDays(r.dryEnd,1))-2}" y="${y+5}" width="${x(addDays(r.e,1))-x(addDays(r.dryEnd,1))}" height="16" rx="4"/>`;
         svg+=`<text class="d" x="${x(addDays(r.e,1))+6}" y="${y+16}">~${fmt1(r.h)} h</text>`}});
     const tx=x(today)+colW/2; svg+=`<line class="today" x1="${tx}" y1="${top-8}" x2="${tx}" y2="${H-10}"/><text class="d" x="${tx+4}" y="${H-2}">hoy</text></svg>`;
-    const box=$('#gantt-box'); box.innerHTML=svg; box.classList.remove('in'); requestAnimationFrame(()=>requestAnimationFrame(()=>box.classList.add('in')));
+    const box=$('#gantt-box'); const firstDraw=!box.dataset.drawn; box.dataset.drawn='1'; box.innerHTML=svg;
+    if(firstDraw&&!REDUCED){box.classList.remove('in');requestAnimationFrame(()=>requestAnimationFrame(()=>box.classList.add('in')))}else{box.classList.add('in')}
     const T=totals(S.buffer); const workdays=S.groups.length?countWork(parseDate(startDate()),S.finish,S.mode):0;
     const bs=$('#blockstart').value||'09:00'; const [bh,bm]=bs.split(':').map(Number); const endM=bh*60+bm+Math.round(S.hpd*60); const endStr=`${String(Math.floor(endM/60)%24).padStart(2,'0')}:${String(endM%60).padStart(2,'0')}`;
     $('#gantt-summary').innerHTML=`<span>Pendiente con buffer <b>${fmt1(T.estBuf)} h</b></span><span>Bloque diario <b>${bs}–${endStr}</b> (${fmt1(S.hpd)} h)</span><span>Días de trabajo <b>${workdays}</b></span><span>Cierre estimado <b>${S.finish?fdate(S.finish):'–'}</b></span>`;
@@ -611,7 +616,8 @@ footer code{font-family:var(--font-mono);font-size:12px}
       total+=dh; html+=`<div class="day"><div class="n">${d.label}<small>${d.blocks.length} bloque${d.blocks.length>1?'s':''}</small></div><div class="strip">${[6,12,18].map(h=>`<span class="tick" style="left:${h/24*100}%"></span>`).join('')}${bars}</div><div class="t">${fmt1(dh)} h</div></div>`;});
     const bs=$('#blockstart').value||'09:00'; const a=mins(bs), z=a+S.hpd*60;
     html+=`<div class="day"><div class="n">Propuesta<small>cada día hábil</small></div><div class="strip">${[6,12,18].map(h=>`<span class="tick" style="left:${h/24*100}%"></span>`).join('')}<i class="plan" style="left:${a/1440*100}%;width:${(z-a)/1440*100}%"></i></div><div class="t">${fmt1(S.hpd)} h</div></div>`;
-    host.innerHTML=html; host.classList.remove('in'); requestAnimationFrame(()=>requestAnimationFrame(()=>host.classList.add('in')));
+    const firstRhythm=!host.dataset.drawn; host.dataset.drawn='1'; host.innerHTML=html;
+    if(firstRhythm&&!REDUCED){host.classList.remove('in');requestAnimationFrame(()=>requestAnimationFrame(()=>host.classList.add('in')))}else{host.classList.add('in')}
     const T=totals(S.buffer);
     const bl=$('#m-blocks'); if(bl) bl.textContent=nb;
     const span=SESSIONS.length>1?Math.round((parseDate(SESSIONS[SESSIONS.length-1].date||TODAY)-parseDate(SESSIONS[0].date||TODAY))/86400000)+1:1;
@@ -638,6 +644,7 @@ footer code{font-family:var(--font-mono);font-size:12px}
         const am=document.createElementNS(NS,'animateMotion'); am.setAttribute('dur',dur+'s'); am.setAttribute('repeatCount','indefinite'); am.setAttribute('begin',(k*dur/2)+'s');
         const mp=document.createElementNS(NS,'mpath'); mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#'+p.id); mp.setAttribute('href','#'+p.id); am.appendChild(mp); c.appendChild(am); svg.appendChild(c); } });
     updatePackets(false);
+    if(REDUCED&&svg.pauseAnimations)svg.pauseAnimations();
   }
   function updatePackets(meta){ document.querySelectorAll('#diagram .pkt').forEach(c=>{ const on=meta||c.dataset.s==='done'||c.dataset.s==='doing'; c.classList.toggle('show',on&&!REDUCED); }); }
   function setView(meta){ const d=$('#diagram'); if(meta&&!d.classList.contains('meta')){ // power-on sequence: reorder stagger by y position
@@ -654,17 +661,31 @@ footer code{font-family:var(--font-mono);font-size:12px}
     let ticking=false;
     const reveal=()=>{ticking=false;const vh=window.innerHeight||800;all.forEach(e=>{if(e.classList.contains('in'))return;const r=e.getBoundingClientRect();if(r.top<vh*0.92&&r.bottom>0)e.classList.add('in')})};
     const onScroll=()=>{if(!ticking){ticking=true;requestAnimationFrame(reveal)}};
-    window.addEventListener('scroll',onScroll,{passive:true}); window.addEventListener('resize',onScroll); window.addEventListener('hashchange',()=>setTimeout(reveal,50));
-    if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:0});all.forEach(e=>io.observe(e))}
+    const hasIO='IntersectionObserver' in window;
+    // con observer no hace falta medir cada sección en cada scroll
+    if(!hasIO){window.addEventListener('scroll',onScroll,{passive:true})}
+    window.addEventListener('resize',onScroll); window.addEventListener('hashchange',()=>setTimeout(reveal,50));
+    if(hasIO){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:0});all.forEach(e=>io.observe(e))}
     reveal(); setTimeout(reveal,300); setTimeout(()=>all.forEach(e=>e.classList.add('in')),4000);
     const links=[...document.querySelectorAll('nav.sec a')];
     if('IntersectionObserver' in window){const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('cur',l.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-40% 0px -55% 0px'});document.querySelectorAll('section[id]').forEach(s=>so.observe(s))}
   }
 
+  // ---------- idle: nada anima fuera de pantalla ----------
+  function idle(){
+    if(!('IntersectionObserver' in window))return;
+    const dia=$('#diagram'), svg=$('#diagram svg');
+    const io=new IntersectionObserver(es=>es.forEach(e=>{
+      e.target.classList.toggle('anim-off',!e.isIntersecting);
+      if(e.target===dia&&svg&&svg.pauseAnimations&&!REDUCED){e.isIntersecting?svg.unpauseAnimations():svg.pauseAnimations()}
+    }),{rootMargin:'120px 0px'});
+    ['#diagram','.band','header.top','#phases','#gantt-box','#days-chart'].forEach(sel=>{const el=document.querySelector(sel);if(el)io.observe(el)});
+  }
+
   // ---------- init ----------
   ['hpd','days','start','blockstart','buffer','rate'].forEach(id=>{const el=$('#'+id);const v=load(id,null);if(v!==null)el.value=v;el.addEventListener('input',()=>{store(id,el.value);renderMeters();renderGantt()})});
   decorateDiagram(); if(load('view','hoy')==='meta')setView(true);
-  renderPhases(); renderGantt(); observe();
+  renderPhases(); renderGantt(); observe(); idle();
   setTimeout(renderMeters,150);
 })();
 </script>

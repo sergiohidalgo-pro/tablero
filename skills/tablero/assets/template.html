@@ -1,0 +1,670 @@
+<meta charset="utf-8">
+<title>{{TITULO}}</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Dark-first: bare :root is the dark palette; light is the swap. */
+:root{
+  --bg:#0A1017; --bg-2:#0E151E; --surface:#121A25; --surface-2:#19232F; --line:#233040; --line-strong:#33445A;
+  --ink:#E8EEF6; --muted:#9AA8B9; --faint:#5F6E80;
+  --accent:#5EA2FF; --accent-ink:#06101C; --accent-soft:#16294A; --accent-glow:rgba(94,162,255,.45);
+  --on:#35D48A; --on-soft:#0F2E22; --on-glow:rgba(53,212,138,.55);
+  --warn:#F2B34C; --warn-soft:#3A2A0C; --warn-glow:rgba(242,179,76,.5);
+  --bad:#FF6B6B; --bad-soft:#3E1717; --bad-glow:rgba(255,107,107,.55);
+  --off:#4A5766; --off-soft:#151C25; --off-ink:#7A8797;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.35);
+  --grid:rgba(94,162,255,.06);
+  --font-display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#EEF2F7; --bg-2:#E6EBF2; --surface:#FFFFFF; --surface-2:#EDF1F6; --line:#D3DAE4; --line-strong:#AEB9C8;
+    --ink:#121A25; --muted:#556478; --faint:#8794A5;
+    --accent:#2454D6; --accent-ink:#FFFFFF; --accent-soft:#DFE8FF; --accent-glow:rgba(36,84,214,.35);
+    --on:#0E8F5A; --on-soft:#D9F3E6; --on-glow:rgba(14,143,90,.4);
+    --warn:#B36B00; --warn-soft:#FBEBCF; --warn-glow:rgba(179,107,0,.4);
+    --bad:#C43030; --bad-soft:#FADADA; --bad-glow:rgba(196,48,48,.4);
+    --off:#B0BAC7; --off-soft:#F3F5F8; --off-ink:#7C8896;
+    --shadow:0 1px 2px rgba(20,30,50,.06),0 8px 24px rgba(20,30,50,.07);
+    --grid:rgba(36,84,214,.06);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#EEF2F7; --bg-2:#E6EBF2; --surface:#FFFFFF; --surface-2:#EDF1F6; --line:#D3DAE4; --line-strong:#AEB9C8;
+  --ink:#121A25; --muted:#556478; --faint:#8794A5;
+  --accent:#2454D6; --accent-ink:#FFFFFF; --accent-soft:#DFE8FF; --accent-glow:rgba(36,84,214,.35);
+  --on:#0E8F5A; --on-soft:#D9F3E6; --on-glow:rgba(14,143,90,.4);
+  --warn:#B36B00; --warn-soft:#FBEBCF; --warn-glow:rgba(179,107,0,.4);
+  --bad:#C43030; --bad-soft:#FADADA; --bad-glow:rgba(196,48,48,.4);
+  --off:#B0BAC7; --off-soft:#F3F5F8; --off-ink:#7C8896;
+  --shadow:0 1px 2px rgba(20,30,50,.06),0 8px 24px rgba(20,30,50,.07);
+  --grid:rgba(36,84,214,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px;background-attachment:fixed}
+a{color:var(--accent)}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(34px,4.6vw,54px);letter-spacing:-.02em;font-weight:800}
+h2{font-size:26px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-strong),transparent)}
+h3{font-size:17px}
+p{margin:0 0 10px;max-width:70ch}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+
+/* ---------- motion primitives ---------- */
+.js .rv{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.15}}
+@keyframes flow{to{stroke-dashoffset:-24}}
+@keyframes glowin{from{box-shadow:0 0 0 0 var(--on-glow)}to{box-shadow:0 0 0 12px transparent}}
+@keyframes scan{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  .js .rv{opacity:1;transform:none}
+}
+
+/* ---------- header ---------- */
+header.top{padding:44px 0 18px;position:relative}
+header.top::before{content:"";position:absolute;inset:-60px -40px auto;height:340px;background:radial-gradient(60% 80% at 20% 0%,var(--accent-glow),transparent 60%);opacity:.55;pointer-events:none;filter:blur(20px)}
+header.top>*{position:relative}
+header.top .sub{color:var(--muted);margin-top:12px;max-width:78ch;font-size:15.5px}
+.stamp{display:inline-flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);margin-top:10px;font-family:var(--font-mono)}
+.stamp .dot{width:8px;height:8px;border-radius:50%;background:var(--on);box-shadow:0 0 10px var(--on-glow);animation:pulse 2.2s ease-in-out infinite}
+
+/* ---------- status band ---------- */
+.band{display:grid;grid-template-columns:1.35fr 1fr 1fr 1.2fr;gap:14px;margin:18px 0 26px}
+@media (max-width:980px){.band{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.band{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);position:relative}
+.meter{padding:18px 20px 16px;display:flex;flex-direction:column;gap:9px;overflow:hidden}
+.meter .label{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.meter .big{font-size:40px;font-family:var(--font-display);font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.meter .big small{font-size:14px;font-weight:500;color:var(--muted);margin-left:6px;letter-spacing:0}
+.bar{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;position:relative}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:99px;width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1);box-shadow:0 0 12px var(--accent-glow)}
+.bar>i.ok{background:var(--on);box-shadow:0 0 12px var(--on-glow)}
+.meter .foot{font-size:12px;color:var(--muted)}
+.ring{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.ring svg{width:112px;height:112px;display:block}
+.ring .track{stroke:var(--surface-2);stroke-width:9;fill:none}
+.ring .arc{stroke:var(--accent);stroke-width:9;fill:none;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1);filter:drop-shadow(0 0 6px var(--accent-glow))}
+.ring .arc2{stroke:var(--on);stroke-width:4;fill:none;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1) .2s;filter:drop-shadow(0 0 6px var(--on-glow))}
+.ring .pct{font-family:var(--font-display);font-weight:800;font-size:26px;fill:var(--ink);font-variant-numeric:tabular-nums}
+.ring .pctl{font-size:9px;fill:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.ring .k{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.ring .k b{font-family:var(--font-display);font-size:18px;font-variant-numeric:tabular-nums}
+.ring .k span.on{color:var(--on)}.ring .k span.ac{color:var(--accent)}
+.now{border-color:var(--bad);box-shadow:var(--shadow),0 0 0 1px var(--bad-soft) inset}
+.now::after{content:"";position:absolute;left:0;right:0;height:40%;top:0;background:linear-gradient(180deg,transparent,var(--bad-soft),transparent);opacity:.35;animation:scan 4s linear infinite;pointer-events:none}
+.now .big{font-size:18px;line-height:1.3;font-weight:600;display:flex;gap:10px;align-items:flex-start}
+.led{flex:none;width:10px;height:10px;border-radius:50%;margin-top:6px}
+.led.bad{background:var(--bad);box-shadow:0 0 10px var(--bad-glow);animation:blink 1.4s steps(1) infinite}
+
+/* ---------- nav ---------- */
+nav.sec{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);margin-bottom:30px}
+nav.sec ul{list-style:none;margin:0;padding:0;display:flex;gap:2px;overflow-x:auto}
+nav.sec a{display:block;padding:13px 12px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+nav.sec a:hover,nav.sec a:focus-visible,nav.sec a.cur{color:var(--ink);outline:none;border-bottom-color:var(--accent)}
+
+section{margin-bottom:48px}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:900px){.cols{grid-template-columns:1fr}}
+.col{padding:18px 20px}
+.col h3{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.col ul{margin:0;padding-left:18px}
+.col li{margin-bottom:7px}
+.col.on{border-top:3px solid var(--on)}
+.col.bad{border-top:3px solid var(--bad)}
+.col.off{border-top:3px solid var(--off)}
+
+/* chips = LEDs */
+.chip{display:inline-flex;align-items:center;gap:7px;padding:3px 10px 3px 8px;border-radius:99px;font-size:12px;font-weight:600;letter-spacing:.02em;white-space:nowrap;border:1px solid transparent}
+.chip::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.chip.done{background:var(--on-soft);color:var(--on);border-color:color-mix(in srgb,var(--on) 35%,transparent)}
+.chip.done::before{box-shadow:0 0 8px var(--on-glow)}
+.chip.doing{background:var(--warn-soft);color:var(--warn)}
+.chip.doing::before{box-shadow:0 0 8px var(--warn-glow);animation:pulse 1.6s ease-in-out infinite}
+.chip.blocked{background:var(--bad-soft);color:var(--bad)}
+.chip.blocked::before{box-shadow:0 0 8px var(--bad-glow);animation:blink 1.4s steps(1) infinite}
+.chip.todo{background:var(--off-soft);color:var(--off-ink);border-color:var(--line)}
+.chip.todo::before{background:transparent;border:1.5px solid var(--off);box-sizing:border-box}
+.chip.opt{background:transparent;color:var(--off-ink);border-color:var(--line);border-style:dashed}
+.chip.opt::before{background:transparent;border:1.5px dashed var(--off);box-sizing:border-box}
+
+.next{margin-top:14px;padding:16px 20px;display:grid;grid-template-columns:auto 1fr;gap:8px 14px;align-items:baseline}
+.next .k{font-family:var(--font-mono);font-size:12px;color:var(--accent);font-weight:500}
+.next code{font-family:var(--font-mono);font-size:12.5px;background:var(--surface-2);padding:1px 6px;border-radius:4px}
+
+/* ---------- architecture ---------- */
+.toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:10px;overflow:hidden;background:var(--surface)}
+.toggle button{background:transparent;color:var(--muted);border:0;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer;transition:background .25s,color .25s}
+.toggle button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:0 0 16px var(--accent-glow)}
+.toggle button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.arch-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i.l{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--on);box-shadow:0 0 8px var(--on-glow)}
+.legend i.l.doing{background:var(--warn);box-shadow:0 0 8px var(--warn-glow)}
+.legend i.l.off{background:transparent;border:1.5px solid var(--off);box-shadow:none}
+.legend i.e{width:26px;height:0;border-top:2px dashed var(--on);display:inline-block}
+.legend i.e.off{border-color:var(--off)}
+.diagram{padding:12px;overflow-x:auto;background:radial-gradient(70% 60% at 50% 40%,color-mix(in srgb,var(--accent-soft) 45%,transparent),transparent 70%),var(--surface)}
+.diagram svg{width:100%;height:auto;min-width:760px;display:block;font-family:var(--font-body)}
+.diagram text{fill:var(--ink);font-size:12px;transition:fill .5s}
+.diagram text.t{font-size:11px;fill:var(--muted)}
+.diagram text.h{font-weight:600;font-size:12.5px}
+.diagram .zone{fill:color-mix(in srgb,var(--surface-2) 70%,transparent);stroke:var(--line-strong);stroke-width:1;stroke-dasharray:4 3}
+.diagram .ext{fill:var(--surface-2);stroke:var(--line-strong);stroke-width:1.5}
+.diagram g[data-s]{transition:opacity .5s;transition-delay:calc(var(--i,0)*70ms)}
+.diagram g[data-s] .box{fill:var(--surface);stroke-width:2;transition:stroke .5s,filter .5s,fill .5s;transition-delay:calc(var(--i,0)*70ms)}
+.diagram g[data-s] .led{transition:fill .5s,filter .5s;transition-delay:calc(var(--i,0)*70ms)}
+/* ON */
+.diagram g[data-s="done"] .box{stroke:var(--on);filter:drop-shadow(0 0 8px var(--on-glow))}
+.diagram g[data-s="done"] .led{fill:var(--on);filter:drop-shadow(0 0 5px var(--on-glow))}
+/* PARTIAL */
+.diagram g[data-s="doing"] .box{stroke:var(--warn);filter:drop-shadow(0 0 8px var(--warn-glow))}
+.diagram g[data-s="doing"] .led{fill:var(--warn);filter:drop-shadow(0 0 5px var(--warn-glow));animation:pulse 1.6s ease-in-out infinite}
+/* OFF */
+.diagram g[data-s="todo"]{opacity:.62}
+.diagram g[data-s="todo"] .box{stroke:var(--off);stroke-dasharray:5 4;fill:var(--off-soft)}
+.diagram g[data-s="todo"] text{fill:var(--off-ink)}
+.diagram g[data-s="todo"] .led{fill:transparent;stroke:var(--off);stroke-width:1.2}
+/* edges */
+.diagram .edge{stroke:var(--off);stroke-width:2;fill:none;stroke-dasharray:5 5;marker-end:url(#arr-off);opacity:.7;transition:stroke .5s,opacity .5s}
+.diagram .edge.live{stroke:var(--on);marker-end:url(#arr-on);opacity:1;stroke-dasharray:6 6;animation:flow 1.1s linear infinite;filter:drop-shadow(0 0 4px var(--on-glow))}
+.diagram .edge.live[data-s="doing"]{stroke:var(--warn);marker-end:url(#arr-warn);filter:drop-shadow(0 0 4px var(--warn-glow))}
+.diagram .pkt{fill:var(--on);filter:drop-shadow(0 0 5px var(--on-glow));display:none}
+.diagram .pkt.warn{fill:var(--warn);filter:drop-shadow(0 0 5px var(--warn-glow))}
+.diagram .pkt.show{display:block}
+/* META: everything lit in accent, staggered */
+.diagram.meta g[data-s]{opacity:1}
+.diagram.meta g[data-s] .box{stroke:var(--accent);stroke-dasharray:none;fill:var(--surface);filter:drop-shadow(0 0 8px var(--accent-glow))}
+.diagram.meta g[data-s] text{fill:var(--ink)}
+.diagram.meta g[data-s] .led{fill:var(--accent);stroke:none;filter:drop-shadow(0 0 5px var(--accent-glow));animation:none}
+.diagram.meta .edge{stroke:var(--accent);marker-end:url(#arr-accent);opacity:1;stroke-dasharray:6 6;animation:flow 1.1s linear infinite;filter:drop-shadow(0 0 4px var(--accent-glow))}
+.diagram.meta .pkt{display:block;fill:var(--accent);filter:drop-shadow(0 0 5px var(--accent-glow))}
+@media (prefers-reduced-motion: reduce){.diagram .pkt{display:none!important}}
+.comp{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}
+.comp th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+.comp td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.comp td:first-child{font-weight:500;white-space:nowrap}
+.comp tr.off td{color:var(--off-ink)}
+.tblwrap{overflow-x:auto}
+
+/* ---------- backlog ---------- */
+details.phase{border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:var(--shadow);margin-bottom:10px;overflow:hidden}
+details.phase.lit{border-color:color-mix(in srgb,var(--on) 45%,var(--line))}
+details.phase.lit>summary::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--on);box-shadow:0 0 10px var(--on-glow)}
+details.phase.hot>summary::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--bad);box-shadow:0 0 10px var(--bad-glow);animation:blink 1.4s steps(1) infinite}
+details.phase.dim>summary::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--off)}
+details.phase>summary{position:relative;list-style:none;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto auto auto;gap:14px;align-items:center;padding:15px 20px;transition:background .2s}
+details.phase>summary:hover{background:var(--surface-2)}
+details.phase>summary::-webkit-details-marker{display:none}
+details.phase>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.ph-id{font-family:var(--font-mono);font-size:12px;color:var(--accent);width:56px}
+.ph-name{font-family:var(--font-display);font-weight:600;font-size:16.5px}
+.ph-name small{display:block;font-family:var(--font-body);font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px}
+.ph-prog{width:170px;display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.ph-hours{font-family:var(--font-mono);font-size:12px;color:var(--muted);white-space:nowrap;text-align:right}
+.caret{width:10px;height:10px;border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);transform:rotate(-45deg);transition:transform .2s;justify-self:end}
+details[open]>summary .caret{transform:rotate(45deg)}
+.tasks{border-top:1px solid var(--line);padding:6px 10px 10px}
+details.task{border-bottom:1px solid var(--line);transition:background .2s}
+details.task:last-child{border-bottom:0}
+details.task.off>summary{color:var(--off-ink)}
+details.task.on>summary{color:var(--ink)}
+details.task>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:118px 1fr 84px;gap:12px;align-items:center;padding:9px 8px;font-size:14px}
+details.task>summary:hover{background:var(--surface-2)}
+details.task>summary::-webkit-details-marker{display:none}
+details.task>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:6px}
+details.task .h{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-align:right;white-space:nowrap}
+details.task .body{padding:2px 8px 12px 130px;color:var(--muted);font-size:13.5px}
+details.task .body p{margin-bottom:6px;max-width:90ch}
+details.task .body code{font-family:var(--font-mono);font-size:12px;background:var(--surface-2);padding:1px 5px;border-radius:4px;color:var(--ink)}
+@media (max-width:700px){details.task>summary{grid-template-columns:100px 1fr 60px}details.task .body{padding-left:8px}details.phase>summary{grid-template-columns:auto 1fr auto auto}.ph-prog{display:none}}
+
+/* ---------- costs ---------- */
+.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.pad{padding:18px 20px}
+table.cost{width:100%;border-collapse:collapse;font-size:13.5px}
+table.cost th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
+table.cost td{padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.cost td.r,table.cost th.r{text-align:right;font-family:var(--font-mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+table.cost td small{display:block;color:var(--muted);font-size:12px}
+table.cost tr.total td{font-weight:600;border-bottom:0;border-top:2px solid var(--line-strong);font-size:15px}
+.spark{height:6px;background:var(--surface-2);border-radius:99px;margin-top:6px;overflow:hidden}
+.spark i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--warn));width:0;transition:width 1s cubic-bezier(.2,.7,.2,1)}
+.kv{display:grid;grid-template-columns:1fr auto;gap:7px 14px;font-size:14px;margin-top:10px}
+.kv .v{font-family:var(--font-mono);text-align:right;font-variant-numeric:tabular-nums}
+.field{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+.field input,.field select{font:inherit;font-family:var(--font-mono);font-size:13px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:8px;padding:7px 9px;width:100%;color-scheme:dark light}
+.field input:focus-visible,.field select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.controls{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:10px 0 14px}
+@media (max-width:700px){.controls{grid-template-columns:1fr 1fr}}
+.note{font-size:12.5px;color:var(--muted);margin-top:10px}
+.callout{border-left:3px solid var(--warn);background:var(--warn-soft);padding:10px 14px;border-radius:0 8px 8px 0;font-size:13.5px;margin-top:12px}
+
+/* ---------- gantt ---------- */
+.gantt{padding:12px 8px 6px;overflow-x:auto}
+.gantt svg{display:block;min-width:820px;width:100%;height:auto;font-family:var(--font-body)}
+.gantt text{font-size:11.5px;fill:var(--ink)}
+.gantt text.d{fill:var(--muted);font-size:11px}
+.gantt text.wk{fill:var(--faint);font-size:10.5px}
+.gantt .grid{stroke:var(--line);stroke-width:1}
+.gantt .we{fill:var(--surface-2)}
+.gantt .today{stroke:var(--bad);stroke-width:1.5;stroke-dasharray:3 3;animation:pulse 2s ease-in-out infinite}
+.gantt .actual{fill:var(--on);filter:drop-shadow(0 0 6px var(--on-glow))}
+.gantt .plan{fill:var(--accent);fill-opacity:.9}
+.gantt .buffer{fill:var(--accent);fill-opacity:.3}
+.gantt .bar-a{transform-box:fill-box;transform-origin:left center;transform:scaleX(0);opacity:0;transition:transform 1.1s cubic-bezier(.25,.8,.25,1),opacity .4s ease}
+.gantt.in .bar-a{transform:scaleX(1);opacity:1}
+.gantt .lbl{font-weight:500}
+.summary-line{display:flex;gap:22px;flex-wrap:wrap;font-size:13.5px;margin-top:8px;color:var(--muted)}
+.summary-line b{font-family:var(--font-display);font-size:17px;color:var(--ink)}
+
+/* ---------- rhythm ---------- */
+.days{display:grid;gap:10px}
+.day{display:grid;grid-template-columns:110px 1fr 90px;gap:12px;align-items:center;font-size:13px}
+.day .n{font-weight:500}
+.day .n small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+.strip{position:relative;height:28px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+.strip i{position:absolute;top:4px;bottom:4px;background:var(--on);border-radius:3px;box-shadow:0 0 8px var(--on-glow);transform:scaleX(0);transform-origin:left;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.days.in .strip i{transform:scaleX(1)}
+.strip i.late{background:var(--warn);box-shadow:0 0 8px var(--warn-glow)}
+.strip i.cut{background:var(--bad);box-shadow:0 0 8px var(--bad-glow)}
+.strip i.plan{background:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
+.strip .tick{position:absolute;top:0;bottom:0;width:1px;background:var(--line-strong);opacity:.6}
+.day .t{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-align:right}
+.axis{display:grid;grid-template-columns:110px 1fr 90px;gap:12px;font-size:10.5px;color:var(--faint);font-family:var(--font-mono)}
+.axis div:nth-child(2){display:flex;justify-content:space-between}
+.eval{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:800px){.eval{grid-template-columns:1fr}}
+.eval ul{margin:0;padding-left:18px}
+.eval li{margin-bottom:7px}
+footer{padding:22px 0 56px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line)}
+footer code{font-family:var(--font-mono);font-size:12px}
+</style>
+
+<style>
+/* ---------- brand / footer ---------- */
+.brand{display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.brand svg,.brand img{width:30px;height:30px;flex:none;border-radius:7px}
+.brand .b-txt{font-size:12px;color:var(--faint);line-height:1.45}
+.brand .b-txt b{color:var(--muted);font-weight:600;font-family:var(--font-display)}
+.brand a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line-strong)}
+.brand a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">{{EYEBROW · contexto: sub-proyecto, cliente, área}}</div>
+  <h1>{{TITULO}}</h1>
+  <p class="sub">{{Una frase: qué es esto, dónde corre, qué NO toca. Nombres propios en <span class="mono">mono</span>.}}</p>
+  <div class="stamp"><span class="dot"></span> actualizado {{AAAA-MM-DD HH:MM}} · {{hito vivo}} · {{fuentes: transcripts, az CLI, runs}}</div>
+</header>
+
+<!-- BANDA: 4 medidores. Orden fijo: avance · hecho · pendiente · foco/riesgo -->
+<div class="band" id="band">
+  <div class="card meter ring rv">
+    <svg viewBox="0 0 120 120" aria-label="Avance por esfuerzo y por tareas"><circle class="track" cx="60" cy="60" r="50"/><circle class="arc" id="ring-e" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16"/><circle class="track" cx="60" cy="60" r="40" style="stroke-width:4"/><circle class="arc2" id="ring-t" cx="60" cy="60" r="40" stroke-dasharray="251.33" stroke-dashoffset="251.33"/><text class="pct" x="60" y="64" text-anchor="middle" id="ring-pct">0%</text><text class="pctl" x="60" y="78" text-anchor="middle">esfuerzo</text></svg>
+    <div class="k"><div class="label">Avance</div><span class="ac"><b id="k-effort">0 %</b> por esfuerzo (horas)</span><span class="on"><b id="k-tasks">0 / 0</b> tareas cerradas</span><span class="foot" id="k-foot"></span></div>
+  </div>
+  <div class="card meter rv"><div class="label">Horas hechas</div><div class="big"><span data-count id="m-actual">0</span><small>h en <span id="m-blocks">0</span> bloques</small></div><div class="bar"><i class="ok" id="m-actual-bar"></i></div><div class="foot" id="m-actual-foot">{{desglose por día · criterio de corte de pausas}}</div></div>
+  <div class="card meter rv"><div class="label">Horas por hacer</div><div class="big"><span data-count id="m-left">0</span><small>h con buffer</small></div><div class="bar"><i id="m-left-bar"></i></div><div class="foot" id="m-left-foot"></div></div>
+  <!-- Si hay un bloqueo real, usa class="card meter now rv" y <span class="led bad"> -->
+  <div class="card meter rv"><div class="label">Siguiente bloque</div><div class="big"><span class="led" style="background:var(--warn);box-shadow:0 0 10px var(--warn-glow)"></span><span>{{Qué sigue, en 4-6 palabras}}</span></div><div class="foot">{{Estado honesto: qué quedó vivo, qué falta, bug abierto con su id}}</div></div>
+</div>
+</div>
+
+<nav class="sec"><div class="wrap"><ul>
+  <li><a href="#donde">Dónde vamos</a></li>
+  <li><a href="#arq">{{Arquitectura|Capa de detección|Mapa}}</a></li>
+  <li><a href="#backlog">Backlog</a></li>
+  <li><a href="#costos">Costos</a></li>
+  <li><a href="#gantt">Gantt</a></li>
+  <li><a href="#ritmo">{{Ritmo de sesiones|Riesgos vivos}}</a></li>
+</ul></div></nav>
+
+<div class="wrap">
+
+<section id="donde" class="rv">
+  <h2>Dónde vamos</h2>
+  <div class="cols">
+    <div class="card col on">
+      <h3><span class="chip done">encendido</span></h3>
+      <ul><li><b>{{Hito}}</b>: {{qué quedó funcionando, con evidencia verificable}}.</li></ul>
+    </div>
+    <div class="card col bad">
+      <h3><span class="chip blocked">bloqueado</span></h3>
+      <ul><li><b>{{Bloqueo}}</b>: {{qué frena, quién lo destraba, qué se necesita}}.</li></ul>
+    </div>
+    <div class="card col off">
+      <h3><span class="chip todo">apagado</span></h3>
+      <ul><li><b>{{Pendiente}}</b>: {{qué falta y de qué depende}}.</li></ul>
+    </div>
+  </div>
+  <div class="card next">
+    <span class="k">siguiente</span><span>{{La acción concreta: archivo, comando o URL exacta}}</span>
+    <span class="k">necesita</span><span>{{Qué requiere "dale" del usuario}}</span>
+  </div>
+</section>
+
+<section id="arq" class="rv">
+  <h2>{{Arquitectura}}</h2>
+  <div class="arch-head">
+    <div class="legend"><span><i class="l"></i> encendido</span><span><i class="l doing"></i> parcial</span><span><i class="l off"></i> apagado</span><span><i class="e"></i> dato fluyendo</span><span><i class="e off"></i> unión cerrada</span></div>
+    <div class="toggle" role="group" aria-label="Vista del diagrama"><button id="v-hoy" aria-pressed="true">Hoy</button><button id="v-meta" aria-pressed="false">Meta · encender todo</button></div>
+  </div>
+  <div class="card diagram" id="diagram">
+  <!-- REGLAS DEL DIAGRAMA
+       · Un <g data-s="done|doing|todo"> por componente, con <rect class="box"> + <text class="h"> + <text class="t">.
+         El LED se inyecta por JS en la esquina del rect; no lo dibujes a mano.
+       · Aristas ANTES de los nodos: <path id="eN" class="edge" data-s="done|doing|todo" d="..."/>.
+         done/doing se animan con paquetes; todo queda punteada y apagada.
+       · Zonas (clúster, VPC, cuenta) con <rect class="zone">; lo que no cambia, con <rect class="ext">.
+       · viewBox ancho (1100x560 típico); min-width:760px lo hace scrollear en móvil sin romperse. -->
+  <svg viewBox="0 0 1100 560" role="img" aria-label="{{Diagrama con el estado de cada componente y el flujo de datos}}">
+    <defs>
+      <marker id="arr-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--on)"/></marker>
+      <marker id="arr-warn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--warn)"/></marker>
+      <marker id="arr-off" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--off)"/></marker>
+      <marker id="arr-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+    </defs>
+    <rect class="zone" x="262" y="20" width="560" height="520" rx="12"/>
+    <text x="280" y="42" class="h">{{zona}}</text><text x="280" y="58" class="t">{{atributos de la zona}}</text>
+    <path id="e1" class="edge" data-s="done" d="M180 53H296"/>
+    <rect class="ext" x="30" y="30" width="150" height="46" rx="8"/><text x="105" y="50" text-anchor="middle" class="h">{{Externo}}</text><text x="105" y="66" text-anchor="middle" class="t">{{no cambia}}</text>
+    <g data-s="done"><rect class="box" x="296" y="30" width="228" height="46" rx="7"/><text x="410" y="50" text-anchor="middle" class="h">{{Componente}}</text><text x="410" y="66" text-anchor="middle" class="t">{{evidencia corta}}</text></g>
+  </svg>
+  </div>
+  <div class="tblwrap"><table class="comp">
+    <thead><tr><th>Componente</th><th>Estado</th><th>Evidencia</th></tr></thead>
+    <tbody>
+      <tr><td>{{Componente}}</td><td><span class="chip done">encendido</span></td><td>{{id de run, fecha, salida del comando — verificable, no adjetivos}}</td></tr>
+      <tr class="off"><td>{{Componente}}</td><td><span class="chip todo">apagado</span></td><td>{{fase en que entra}}</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="backlog" class="rv">
+  <h2>Backlog</h2>
+  <p class="note" style="margin:-6px 0 12px">Cada fase se despliega; cada tarea abre su detalle. Horas = horas de sesión, no horas de pipeline. Las tareas opcionales no cuentan para el porcentaje.</p>
+  <div id="phases"></div>
+</section>
+
+<section id="costos" class="rv">
+  <h2>Costos</h2>
+  <div class="grid2">
+    <div class="card pad">
+      <h3>Dinero · {{run-rate mensual incremental (USD)}}</h3>
+      <p class="note" style="margin:4px 0 10px">{{Origen y fecha de los precios. Di explícitamente qué NO está contado porque ya se pagaba.}}</p>
+      <div class="tblwrap"><table class="cost">
+        <thead><tr><th>Recurso</th><th class="r">Bajo</th><th class="r">Alto</th></tr></thead>
+        <tbody id="cost-rows"></tbody>
+      </table></div>
+      <div class="callout">{{La palanca: qué línea domina el costo y cómo se acota.}}</div>
+    </div>
+    <div class="card pad">
+      <h3>Horas</h3>
+      <div class="kv" id="hours-kv"></div>
+      <div class="controls" style="grid-template-columns:1fr 1fr;margin-top:14px">
+        <label class="field">Buffer sobre lo pendiente<select id="buffer"><option value="1">0 % (estimación seca)</option><option value="1.3" selected>30 % (primeros rollouts)</option><option value="1.5">50 %</option></select></label>
+        <label class="field">Tarifa hora (USD, opcional)<input id="rate" type="number" min="0" step="5" placeholder="0"></label>
+      </div>
+      <div class="kv" id="labor-kv"></div>
+      <p class="note">{{De dónde salen las horas hechas y qué cubre el buffer.}}</p>
+    </div>
+  </div>
+</section>
+
+<section id="gantt" class="rv">
+  <h2>Carta Gantt</h2>
+  <div class="card pad">
+    <div class="controls">
+      <label class="field">Horas por día<input id="hpd" type="number" min="0.5" max="8" step="0.5" value="2"></label>
+      <label class="field">Días<select id="days"><option value="5" selected>Lunes a viernes</option><option value="6">Lunes a sábado</option><option value="7">Todos los días</option></select></label>
+      <label class="field">Inicio<input id="start" type="date" value="{{AAAA-MM-DD}}"></label>
+      <label class="field">Hora del bloque<input id="blockstart" type="time" value="09:00"></label>
+    </div>
+    <div class="summary-line" id="gantt-summary"></div>
+    <div class="gantt" id="gantt-box"><svg id="gantt-svg"></svg></div>
+    <p class="note">Verde = trabajo real registrado. Azul = proyección secuencial de lo pendiente al ritmo elegido; el tramo claro es el buffer. La línea roja marca hoy.</p>
+  </div>
+</section>
+
+<section id="ritmo" class="rv">
+  <h2>Ritmo de sesiones</h2>
+  <div class="card pad">
+    <div class="days" id="days-chart"></div>
+    <div class="axis"><div></div><div><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div><div></div></div>
+    <div class="eval">
+      <div><h3>Qué muestran los datos</h3><ul id="eval-data"></ul></div>
+      <div><h3>Recomendación de ritmo</h3><ul id="eval-reco"></ul></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Fuentes: {{rutas de archivos, ids de runs, tickets, rangos de memoria — todo verificable}}. {{Qué es estimación y cómo se confirma con el dato real.}}
+  <div class="brand">
+    <!-- Logo de Sergio Hidalgo. En un fork, reemplázalo por el tuyo (assets/logo.svg). -->
+    <svg role="img" aria-label="Sergio Hidalgo" viewBox="0 0 1024 1024"><path fill-rule="evenodd" fill="#00c6a9" d="m249 33h524c120.4 0 218 97.6 218 218v524c0 120.4-97.6 218-218 218h-524c-120.4 0-218-97.6-218-218v-524c0-120.4 97.6-218 218-218z"/><path fill="#1a2238" d="m285.8 579.5c75.4 0 123.3-40.9 123.3-100.5 0-59.6-46-83.8-115.4-98.7l-10.7-2.3c-39.1-8.4-57.2-20-57.2-44.2 0-24.2 17.2-39.1 54.4-39.1 37.2 0 60 14.9 60 52.1v14h60.5v-14c0-70.7-50.7-106.1-120.5-106.1-69.8 0-114.9 35.4-114.9 95 0 59.5 39.5 82.3 107 97.2l10.7 2.3c41.9 9.4 65.6 18.7 65.6 45.7 0 26-20.9 44.6-62.8 44.6-41.9 0-67.5-19.5-67.5-58.6v-13h-60.5v13c0 70.7 52.6 112.6 128 112.6zm168.9-6.5h61.4v-135.4h121v135.4h61.5v-325.8h-61.5v134.5h-121v-134.5h-61.4z"/><path fill="#ffffff" d="m278.7 850.2c12.1 0 21.4-8.8 21.4-21.5 0-12.6-9.3-21.4-21.4-21.4-12.2 0-21.5 8.8-21.5 21.4 0 12.7 9.3 21.5 21.5 21.5zm48.2-3.2h29.8v-57.8h35.2c29 0 50.6-19 50.6-48.6v-3.1c0-29.6-20.7-48.6-50.6-48.6h-65zm29.8-84.9v-46.1h32.3c14.2 0 23.7 8.4 23.7 21.9v2.3c0 13.5-9.7 21.9-23.7 21.9zm106.2 84.9h29.8v-59.6h41.6c8.8 0 12.2 5 12.2 12.2v47.4h29.8v-51.7c0-12.7-7-20.8-19-21.5v-4c13.3-5.4 23.5-17 23.5-35.9v-2.7c0-25.6-19.7-42.3-49.2-42.3h-68.7zm29.8-86.7v-44.3h35.7c14.4 0 22.6 8.4 22.6 21v2.3c0 12.6-8.6 21-22.6 21zm174.6 89.9c39.8 0 65.1-22.6 65.1-63.3v-37.9c0-40.6-25.3-63.2-65.1-63.2-39.7 0-65 22.6-65 63.2v37.9c0 40.7 25.3 63.3 65 63.3zm0-26.7c-22.1 0-35.2-14-35.2-35.7v-39.7c0-21.7 13.1-35.7 35.2-35.7 22.1 0 35.2 14 35.2 35.7v39.7c0 21.7-13.1 35.7-35.2 35.7z"/><path fill="#1a2238" d="m745.8 575.4h149.4v-34.8h-149.4z"/></svg>
+    <div class="b-txt"><b>Tablero</b> — formato de estado de proyecto de <a href="https://github.com/sergiohidalgo-pro">Sergio Hidalgo</a>.<br>Generado con la skill <a href="https://github.com/sergiohidalgo-pro/tablero">tablero</a> · MIT.</div>
+  </div>
+</footer>
+</div>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- data ----------
+  // Única zona editable de datos. Todo lo de abajo se calcula desde aquí.
+  // s: done | doing | blocked | todo | opt   ·   act = horas reales gastadas   ·   est = horas estimadas restantes
+  // d: detalle en HTML corto (ids, rutas, salidas de comandos). Las tareas 'opt' no cuentan para el %.
+  const PHASES = [
+    {id:'F0', name:'{{Nombre de la fase}}', sub:'{{qué agrupa}}', tasks:[
+      {n:'{{Tarea cerrada}}', s:'done', act:0.2, d:'{{Evidencia: id, ruta, salida.}}'},
+      {n:'{{Tarea en curso}}', s:'doing', est:1.5, d:'{{Qué falta exactamente.}}'},
+      {n:'{{Tarea bloqueada}}', s:'blocked', est:1, d:'{{Quién o qué la destraba.}}'},
+      {n:'{{Tarea pendiente}}', s:'todo', est:2, d:'{{Alcance.}}'},
+      {n:'{{Mejora opcional}}', s:'opt', est:1, d:'{{No cuenta para el porcentaje.}}'},
+    ]},
+  ];
+  // Bloques reales de sesión (cortando pausas > 20 min). k: on (horario normal) | late (nocturno) | cut (interrumpido)
+  const SESSIONS = [
+    {label:'{{lun 24-ago}}', date:'2026-08-24', blocks:[{s:'19:52', e:'22:50', k:'late', t:'{{qué se hizo}}'}]},
+  ];
+  // Costos incrementales: SOLO lo nuevo. lo/hi = rango mensual en USD.
+  const COSTS = [
+    {n:'{{Recurso}}', sub:'{{SKU · supuesto de consumo}}', lo:0, hi:0},
+  ];
+  const COST_NOTE = '{{Qué queda fuera del total y por qué (costos de una sola vez, recursos que ya se pagaban).}}';
+  // Gantt: barras de trabajo YA hecho (verde). Las azules se proyectan solas desde PHASES.
+  const DONE_BARS = [
+    {name:'{{Plan + exploración}}', s:'2026-08-24', e:'2026-08-24'},
+  ];
+  const TODAY = '{{AAAA-MM-DD}}';                 // línea roja del Gantt
+  const PHASE_ORDER = PHASES.map(p=>p.id);        // orden de proyección; ajústalo si el plan no es secuencial
+  const EVAL_RECO = [                             // recomendaciones de ritmo (HTML corto)
+    '<b>{{Un bloque fijo de N h al día}}</b>: {{consecuencia con lo pendiente}}.',
+  ];
+  const EVAL_EXTRA = [                            // observaciones cualitativas del ritmo, con evidencia
+    '{{Qué bloque rindió más y por qué — con hora y resultado, no impresión.}}',
+  ];
+
+  // ---------- helpers ----------
+  const $ = s => document.querySelector(s);
+  const fmt1 = n => (Math.round(n*10)/10).toLocaleString('es-CL',{minimumFractionDigits:1,maximumFractionDigits:1});
+  const fmt0 = n => Math.round(n).toLocaleString('es-CL');
+  const SLABEL = {done:'encendido',doing:'en curso',blocked:'bloqueado',todo:'apagado',opt:'opcional'};
+  const store=(k,v)=>{try{localStorage.setItem('tablero.'+k,v)}catch(e){}};
+  const load=(k,d)=>{try{const v=localStorage.getItem('tablero.'+k);return v===null?d:v}catch(e){return d}};
+  function countTo(el,target,fmt,dur){ if(REDUCED){el.textContent=fmt(target);return} const t0=performance.now(); const from=parseFloat(el.dataset.v||'0'); el.dataset.v=target; (function step(t){const k=Math.min(1,(t-t0)/dur);const e=1-Math.pow(1-k,3);el.textContent=fmt(from+(target-from)*e);if(k<1)requestAnimationFrame(step)})(t0); }
+
+  function totals(buffer){
+    let actual=0, est=0, done=0, count=0, optEst=0;
+    PHASES.forEach(p=>p.tasks.forEach(t=>{ if(t.s==='opt'){optEst+=t.est||0;return} count++; actual+=t.act||0; if(t.s==='done'){done++}else{est+=t.est||0} }));
+    return {actual, est, estBuf:est*buffer, done, count, optEst};
+  }
+
+  // ---------- backlog ----------
+  function renderPhases(){
+    const host=$('#phases'); host.innerHTML='';
+    PHASES.forEach((p,i)=>{
+      const counted=p.tasks.filter(t=>t.s!=='opt');
+      const done=counted.filter(t=>t.s==='done').length;
+      const act=counted.reduce((a,t)=>a+(t.act||0),0);
+      const est=counted.reduce((a,t)=>a+(t.s!=='done'?(t.est||0):0),0);
+      const pct=counted.length?Math.round(done/counted.length*100):0;
+      const hot=p.tasks.some(t=>t.s==='blocked'||t.s==='doing');
+      const cls=hot?'hot':(pct===100?'lit':(pct===0?'dim':'lit'));
+      const d=document.createElement('details'); d.className='phase '+cls; if(hot) d.open=true;
+      d.innerHTML=`<summary><span class="ph-id">${p.id}</span><span class="ph-name">${p.name}<small>${p.sub}</small></span><span class="ph-prog"><span>${done}/${counted.length} tareas · ${pct} %</span><span class="bar"><i class="${pct===100?'ok':''}" data-w="${pct}"></i></span></span><span class="ph-hours">${fmt1(act)} h hechas${est?` · ${fmt1(est)} h por hacer`:''}</span><span class="caret"></span></summary><div class="tasks">${p.tasks.map(t=>`<details class="task ${t.s==='done'?'on':(t.s==='todo'||t.s==='opt'?'off':'')}"><summary><span><span class="chip ${t.s}">${SLABEL[t.s]}</span></span><span>${t.n}</span><span class="h">${t.s==='done'?fmt1(t.act||0)+' h':(t.act?fmt1(t.act)+' h + ~'+fmt1(t.est||0)+' h':'~'+fmt1(t.est||0)+' h')}</span></summary><div class="body"><p>${t.d}</p></div></details>`).join('')}</div>`;
+      host.appendChild(d);
+    });
+    requestAnimationFrame(()=>document.querySelectorAll('#phases .bar>i').forEach(i=>i.style.width=i.dataset.w+'%'));
+  }
+
+  // ---------- meters / hours / costs ----------
+  function renderMeters(){
+    const buffer=parseFloat($('#buffer').value);
+    const T=totals(buffer); const totalH=T.actual+T.estBuf;
+    const pctE=Math.round(T.actual/totalH*100), pctT=Math.round(T.done/T.count*100);
+    $('#ring-e').style.strokeDashoffset=(314.16*(1-pctE/100)).toFixed(2);
+    $('#ring-t').style.strokeDashoffset=(251.33*(1-pctT/100)).toFixed(2);
+    countTo($('#ring-pct'),pctE,v=>Math.round(v)+'%',1300);
+    $('#k-effort').textContent=pctE+' %'; $('#k-tasks').textContent=`${T.done} / ${T.count}`;
+    $('#k-foot').textContent=`${fmt1(T.actual)} h de ${fmt1(totalH)} h · ${pctT} % de tareas`;
+    countTo($('#m-actual'),T.actual,v=>fmt1(v),1100); $('#m-actual-bar').style.width=pctE+'%';
+    countTo($('#m-left'),T.estBuf,v=>fmt1(v),1100); $('#m-left-bar').style.width=(100-pctE)+'%';
+    $('#m-left-foot').textContent=`${fmt1(T.est)} h estimadas + ${Math.round((buffer-1)*100)} % de buffer · opcionales ${fmt1(T.optEst)} h aparte`;
+    const rows=[];
+    PHASES.forEach(p=>{const c=p.tasks.filter(t=>t.s!=='opt');const a=c.reduce((x,t)=>x+(t.act||0),0);const e=c.reduce((x,t)=>x+(t.s!=='done'?(t.est||0):0),0);rows.push(`<span>${p.id} · ${p.name}</span><span class="v">${fmt1(a)} h${e?` + ~${fmt1(e*buffer)} h`:''}</span>`)});
+    rows.push(`<span><b>Total</b></span><span class="v"><b>${fmt1(T.actual)} h + ~${fmt1(T.estBuf)} h = ${fmt1(totalH)} h</b></span>`);
+    rows.push(`<span>Opcionales (fuera del total)</span><span class="v">~${fmt1(T.optEst)} h</span>`);
+    $('#hours-kv').innerHTML=rows.join('');
+    const rate=parseFloat($('#rate').value)||0;
+    $('#labor-kv').innerHTML = rate>0 ? `<span>Costo de horas hechas</span><span class="v">USD ${fmt0(T.actual*rate)}</span><span>Costo de lo pendiente (con buffer)</span><span class="v">USD ${fmt0(T.estBuf*rate)}</span><span><b>Total del sub-proyecto</b></span><span class="v"><b>USD ${fmt0(totalH*rate)}</b></span>` : `<span class="note" style="grid-column:1/-1">Ingresa una tarifa para ver el costo en dinero de las horas.</span>`;
+    let lo=0,hi=0; const maxHi=Math.max(...COSTS.map(c=>c.hi));
+    $('#cost-rows').innerHTML = COSTS.map(c=>{lo+=c.lo;hi+=c.hi;return `<tr><td>${c.n}<small>${c.sub||''}</small><div class="spark"><i data-w="${Math.round(c.hi/maxHi*100)}"></i></div></td><td class="r">${fmt0(c.lo)}</td><td class="r">${fmt0(c.hi)}</td></tr>`}).join('') + `<tr class="total"><td>Total mensual incremental</td><td class="r">USD ${fmt0(lo)}</td><td class="r">USD ${fmt0(hi)}</td></tr><tr><td colspan="3"><small>Estimación central ≈ USD ${fmt0((lo+hi)/2)}/mes. ${COST_NOTE}</small></td></tr>`;
+    requestAnimationFrame(()=>document.querySelectorAll('.spark>i').forEach(i=>i.style.width=i.dataset.w+'%'));
+  }
+
+  // ---------- gantt ----------
+  function parseDate(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+  function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+  function isWork(d,mode){const w=d.getDay();if(mode==='7')return true;if(mode==='6')return w!==0;return w!==0&&w!==6}
+  const DIAS=['dom','lun','mar','mié','jue','vie','sáb'], MESES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const fdate=d=>`${DIAS[d.getDay()]} ${d.getDate()}-${MESES[d.getMonth()]}`;
+  function schedule(){
+    const hpd=Math.max(0.5,parseFloat($('#hpd').value)||2), mode=$('#days').value, buffer=parseFloat($('#buffer').value);
+    let day=parseDate(startDate()); let left=hpd;
+    const groups=[]; PHASE_ORDER.forEach(id=>{const p=PHASES.find(x=>x.id===id);if(!p)return;const pend=p.tasks.filter(t=>t.s!=='done'&&t.s!=='opt');if(pend.length)groups.push({id,name:p.name,hours:pend.reduce((a,t)=>a+(t.est||0),0)})});
+    const out=[];
+    groups.forEach(g=>{ let need=g.hours*buffer, dry=g.hours, start=null, dryEnd=null;
+      while(need>1e-9){ if(!isWork(day,mode)){day=addDays(day,1);left=hpd;continue} if(!start)start=new Date(day); const take=Math.min(left,need); need-=take; left-=take; if(dry>0){dry-=take; if(dry<=1e-9&&!dryEnd)dryEnd=new Date(day)} if(left<=1e-9&&need>1e-9){day=addDays(day,1);left=hpd} }
+      out.push({...g,start,dryEnd:dryEnd||new Date(day),end:new Date(day)}); });
+    return {groups:out,hpd,mode,buffer,finish:out.length?out[out.length-1].end:null};
+  }
+  const startDate=()=>($('#start').value||TODAY);
+  function countWork(a,b,mode){let n=0;for(let d=new Date(a);d<=b;d=addDays(d,1))if(isWork(d,mode))n++;return n}
+  function renderGantt(){
+    const S=schedule(); const today=parseDate(TODAY);
+    const first=DONE_BARS.length?parseDate(DONE_BARS.map(b=>b.s).sort()[0]):today;
+    const last=addDays(S.finish||today,2);
+    const nDays=Math.round((last-first)/86400000)+1; const L=170, W=Math.max(820,L+nDays*34), colW=(W-L-20)/nDays, rowH=30, top=44;
+    const rows=DONE_BARS.map(b=>({name:b.name,kind:'actual',s:parseDate(b.s),e:parseDate(b.e)})).concat(S.groups.map(g=>({name:`${g.id} · ${g.name}`,kind:'plan',s:g.start,dryEnd:g.dryEnd,e:g.end,h:g.hours})));
+    const H=top+rows.length*rowH+20; const x=d=>L+Math.round((d-first)/86400000)*colW;
+    let svg=`<svg id="gantt-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">`;
+    for(let i=0;i<nDays;i++){const d=addDays(first,i);const wx=x(d);if(!isWork(d,S.mode))svg+=`<rect class="we" x="${wx}" y="${top-8}" width="${colW}" height="${H-top}"/>`;
+      svg+=`<line class="grid" x1="${wx}" y1="${top-8}" x2="${wx}" y2="${H-10}"/>`;
+      if(nDays<=40||i%2===0)svg+=`<text class="d" x="${wx+colW/2}" y="${top-14}" text-anchor="middle">${d.getDate()}</text>`;
+      if(d.getDay()===1||i===0)svg+=`<text class="wk" x="${wx+2}" y="12">${DIAS[d.getDay()]} ${d.getDate()}-${MESES[d.getMonth()]}</text>`;}
+    rows.forEach((r,i)=>{const y=top+i*rowH;svg+=`<text class="lbl" x="8" y="${y+15}">${r.name}</text>`;
+      if(r.kind==='actual'){svg+=`<rect class="actual bar-a" style="transition-delay:${i*90}ms" x="${x(r.s)+2}" y="${y+5}" width="${x(addDays(r.e,1))-x(r.s)-4}" height="16" rx="4"/>`}
+      else{svg+=`<rect class="plan bar-a" style="transition-delay:${i*90}ms" x="${x(r.s)+2}" y="${y+5}" width="${Math.max(6,x(addDays(r.dryEnd,1))-x(r.s)-4)}" height="16" rx="4"/>`;
+        if(r.e>r.dryEnd)svg+=`<rect class="buffer bar-a" style="transition-delay:${i*90+200}ms" x="${x(addDays(r.dryEnd,1))-2}" y="${y+5}" width="${x(addDays(r.e,1))-x(addDays(r.dryEnd,1))}" height="16" rx="4"/>`;
+        svg+=`<text class="d" x="${x(addDays(r.e,1))+6}" y="${y+16}">~${fmt1(r.h)} h</text>`}});
+    const tx=x(today)+colW/2; svg+=`<line class="today" x1="${tx}" y1="${top-8}" x2="${tx}" y2="${H-10}"/><text class="d" x="${tx+4}" y="${H-2}">hoy</text></svg>`;
+    const box=$('#gantt-box'); box.innerHTML=svg; box.classList.remove('in'); requestAnimationFrame(()=>requestAnimationFrame(()=>box.classList.add('in')));
+    const T=totals(S.buffer); const workdays=S.groups.length?countWork(parseDate(startDate()),S.finish,S.mode):0;
+    const bs=$('#blockstart').value||'09:00'; const [bh,bm]=bs.split(':').map(Number); const endM=bh*60+bm+Math.round(S.hpd*60); const endStr=`${String(Math.floor(endM/60)%24).padStart(2,'0')}:${String(endM%60).padStart(2,'0')}`;
+    $('#gantt-summary').innerHTML=`<span>Pendiente con buffer <b>${fmt1(T.estBuf)} h</b></span><span>Bloque diario <b>${bs}–${endStr}</b> (${fmt1(S.hpd)} h)</span><span>Días de trabajo <b>${workdays}</b></span><span>Cierre estimado <b>${S.finish?fdate(S.finish):'–'}</b></span>`;
+    renderRhythm(S);
+  }
+
+  // ---------- rhythm ----------
+  function mins(t){const [h,m]=t.split(':').map(Number);return h*60+m}
+  function renderRhythm(S){
+    const host=$('#days-chart'); let html=''; let total=0, late=0, nb=0;
+    SESSIONS.forEach(d=>{let dh=0;const bars=d.blocks.map((b,j)=>{const a=mins(b.s),z=mins(b.e);const h=(z-a)/60;dh+=h;nb++;if(a>=19*60||a<6*60)late+=h;return `<i class="${b.k}" style="left:${a/1440*100}%;width:${(z-a)/1440*100}%;transition-delay:${j*80}ms" title="${b.s}–${b.e} · ${b.t}"></i>`}).join('');
+      total+=dh; html+=`<div class="day"><div class="n">${d.label}<small>${d.blocks.length} bloque${d.blocks.length>1?'s':''}</small></div><div class="strip">${[6,12,18].map(h=>`<span class="tick" style="left:${h/24*100}%"></span>`).join('')}${bars}</div><div class="t">${fmt1(dh)} h</div></div>`;});
+    const bs=$('#blockstart').value||'09:00'; const a=mins(bs), z=a+S.hpd*60;
+    html+=`<div class="day"><div class="n">Propuesta<small>cada día hábil</small></div><div class="strip">${[6,12,18].map(h=>`<span class="tick" style="left:${h/24*100}%"></span>`).join('')}<i class="plan" style="left:${a/1440*100}%;width:${(z-a)/1440*100}%"></i></div><div class="t">${fmt1(S.hpd)} h</div></div>`;
+    host.innerHTML=html; host.classList.remove('in'); requestAnimationFrame(()=>requestAnimationFrame(()=>host.classList.add('in')));
+    const T=totals(S.buffer);
+    const bl=$('#m-blocks'); if(bl) bl.textContent=nb;
+    const span=SESSIONS.length>1?Math.round((parseDate(SESSIONS[SESSIONS.length-1].date||TODAY)-parseDate(SESSIONS[0].date||TODAY))/86400000)+1:1;
+    $('#eval-data').innerHTML=[
+      `<b>${fmt1(total)} h en ${nb} bloques</b> repartidos en ${span} día${span>1?'s':''} de calendario · ${fmt1(total/Math.max(1,SESSIONS.length))} h por día con sesión.`,
+      `<b>${total?Math.round(late/total*100):0} % de las horas fuera de horario</b> (después de las 19:00 o antes de las 06:00).`,
+      `Rendimiento: <b>${total?fmt1(T.done/total):'0,0'} tareas cerradas por hora</b> hasta ahora.`,
+    ].concat(EVAL_EXTRA).map(s=>`<li>${s}</li>`).join('');
+    $('#eval-reco').innerHTML=EVAL_RECO.map(s=>`<li>${s}</li>`).join('');
+  }
+
+  // ---------- diagram: LEDs, packets, power-on ----------
+  const NS='http://www.w3.org/2000/svg';
+  function decorateDiagram(){
+    const svg=$('#diagram svg');
+    // stagger index for power-on
+    svg.querySelectorAll('g[data-s]').forEach((g,i)=>{g.style.setProperty('--i',i);
+      const r=g.querySelector('rect.box'); const led=document.createElementNS(NS,'circle'); led.setAttribute('class','led'); led.setAttribute('r','4');
+      led.setAttribute('cx',(+r.getAttribute('x'))+(+r.getAttribute('width'))-10); led.setAttribute('cy',(+r.getAttribute('y'))+10); g.appendChild(led);});
+    // packets on edges
+    svg.querySelectorAll('path.edge').forEach((p,i)=>{ const s=p.dataset.s; if(s==='done'||s==='doing') p.classList.add('live');
+      const len=p.getTotalLength(); const dur=Math.max(1.2,len/70).toFixed(2);
+      for(let k=0;k<2;k++){ const c=document.createElementNS(NS,'circle'); c.setAttribute('r','3'); c.setAttribute('class','pkt'+(s==='doing'?' warn':'')); c.dataset.s=s;
+        const am=document.createElementNS(NS,'animateMotion'); am.setAttribute('dur',dur+'s'); am.setAttribute('repeatCount','indefinite'); am.setAttribute('begin',(k*dur/2)+'s');
+        const mp=document.createElementNS(NS,'mpath'); mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#'+p.id); mp.setAttribute('href','#'+p.id); am.appendChild(mp); c.appendChild(am); svg.appendChild(c); } });
+    updatePackets(false);
+  }
+  function updatePackets(meta){ document.querySelectorAll('#diagram .pkt').forEach(c=>{ const on=meta||c.dataset.s==='done'||c.dataset.s==='doing'; c.classList.toggle('show',on&&!REDUCED); }); }
+  function setView(meta){ const d=$('#diagram'); if(meta&&!d.classList.contains('meta')){ // power-on sequence: reorder stagger by y position
+      const gs=[...d.querySelectorAll('g[data-s]')].sort((a,b)=>(+a.querySelector('rect').getAttribute('y'))-(+b.querySelector('rect').getAttribute('y'))); gs.forEach((g,i)=>g.style.setProperty('--i',i)); }
+    d.classList.toggle('meta',meta); updatePackets(meta);
+    $('#v-hoy').setAttribute('aria-pressed',String(!meta)); $('#v-meta').setAttribute('aria-pressed',String(meta)); store('view',meta?'meta':'hoy'); }
+  $('#v-hoy').addEventListener('click',()=>setView(false));
+  $('#v-meta').addEventListener('click',()=>setView(true));
+
+  // ---------- reveal on scroll + nav highlight ----------
+  function observe(){
+    const all=[...document.querySelectorAll('.rv')];
+    if(REDUCED){all.forEach(e=>e.classList.add('in'));return}
+    let ticking=false;
+    const reveal=()=>{ticking=false;const vh=window.innerHeight||800;all.forEach(e=>{if(e.classList.contains('in'))return;const r=e.getBoundingClientRect();if(r.top<vh*0.92&&r.bottom>0)e.classList.add('in')})};
+    const onScroll=()=>{if(!ticking){ticking=true;requestAnimationFrame(reveal)}};
+    window.addEventListener('scroll',onScroll,{passive:true}); window.addEventListener('resize',onScroll); window.addEventListener('hashchange',()=>setTimeout(reveal,50));
+    if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:0});all.forEach(e=>io.observe(e))}
+    reveal(); setTimeout(reveal,300); setTimeout(()=>all.forEach(e=>e.classList.add('in')),4000);
+    const links=[...document.querySelectorAll('nav.sec a')];
+    if('IntersectionObserver' in window){const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('cur',l.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-40% 0px -55% 0px'});document.querySelectorAll('section[id]').forEach(s=>so.observe(s))}
+  }
+
+  // ---------- init ----------
+  ['hpd','days','start','blockstart','buffer','rate'].forEach(id=>{const el=$('#'+id);const v=load(id,null);if(v!==null)el.value=v;el.addEventListener('input',()=>{store(id,el.value);renderMeters();renderGantt()})});
+  decorateDiagram(); if(load('view','hoy')==='meta')setView(true);
+  renderPhases(); renderGantt(); observe();
+  setTimeout(renderMeters,150);
+})();
+</script>

@@ -1,0 +1,12 @@
+{
+  "name": "tablero",
+  "version": "1.0.0",
+  "description": "Publica el estado de un proyecto como un artefacto vivo: medidores, backlog por fases, costos incrementales y una carta Gantt simulable.",
+  "author": {
+    "name": "Sergio Hidalgo",
+    "url": "https://github.com/sergiohidalgo-pro"
+  },
+  "homepage": "https://github.com/sergiohidalgo-pro/tablero",
+  "license": "MIT",
+  "keywords": ["status", "project-status", "artifact", "reporting", "gantt", "dashboard"]
+}

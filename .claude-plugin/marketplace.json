@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "tablero",
+  "description": "El formato con el que Sergio Hidalgo presenta el estado de sus proyectos, empaquetado como skill.",
+  "owner": {
+    "name": "Sergio Hidalgo",
+    "url": "https://github.com/sergiohidalgo-pro"
+  },
+  "plugins": [
+    {
+      "name": "tablero",
+      "description": "Estado de proyecto como artefacto: medidores, backlog por fases, costos y Gantt simulable.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

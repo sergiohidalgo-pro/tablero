@@ -12,6 +12,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT"></a>
   <img src="https://img.shields.io/badge/Claude%20Code-plugin-5EA2FF" alt="Claude Code plugin">
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/estado-beta%20p%C3%BAblica-f5a623" alt="Beta pública"></a>
   <a href="https://sergiohidalgo-pro.github.io/tablero/demo/"><img src="https://img.shields.io/badge/demo-en%20vivo-00c6a9" alt="Demo en vivo"></a>
 </p>
 
@@ -75,7 +76,11 @@ Las reglas duras de la skill son casi todas sobre honestidad del dato, no sobre 
 
 ## Instalación
 
-Como plugin, desde Claude Code:
+**Beta pública.** El formato lleva semanas en uso con proyectos reales; la instalación como plugin y el uso en Cowork están recién estrenados. Si algo falla, [abre un issue](https://github.com/sergiohidalgo-pro/tablero/issues): es exactamente lo que busco en esta etapa.
+
+### Claude Code
+
+Como plugin:
 
 ```
 /plugin marketplace add sergiohidalgo-pro/tablero
@@ -88,6 +93,14 @@ O solo la skill:
 git clone https://github.com/sergiohidalgo-pro/tablero.git
 ln -s "$PWD/tablero/skills/tablero" ~/.claude/skills/tablero
 ```
+
+### Claude Cowork
+
+Como plugin: **Customize → Plugins → Add marketplace**, pega `sergiohidalgo-pro/tablero` e instala `tablero`.
+
+Como skill suelta: comprime la carpeta `skills/tablero` en un ZIP (la carpeta va en la raíz del ZIP) y súbela en **Customize → Skills → Create skill → Upload**.
+
+En Cowork no existe la herramienta de artefactos de Claude Code, así que el resultado es siempre el archivo HTML local. `publicar` no aplica ahí.
 
 ## Uso
 

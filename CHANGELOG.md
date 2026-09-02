@@ -2,6 +2,12 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [1.1.1] - 2026-09-02
+
+### Eliminado
+
+- `commands/tablero.md`: el skill ya se invoca con `/tablero` en Claude Code y en Cowork, y el comando hacía que el plugin listara el skill dos veces.
+
 ## [1.1.0] - 2026-09-01 — beta pública
 
 ### Añadido
@@ -28,5 +34,6 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado
 
 - Primera publicación: el formato de estado de proyecto como skill y plugin de Claude Code.
 
+[1.1.1]: https://github.com/sergiohidalgo-pro/tablero/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/sergiohidalgo-pro/tablero/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/sergiohidalgo-pro/tablero/releases/tag/v1.0.0

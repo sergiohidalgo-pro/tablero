@@ -4,7 +4,7 @@ description: "Trigger: tablero, estado del proyecto, dónde vamos, avance, proje
 license: MIT
 metadata:
   author: "sergiohidalgo-pro"
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 ## Activation Contract

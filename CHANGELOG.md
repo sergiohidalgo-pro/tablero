@@ -2,6 +2,16 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [1.1.2] - 2026-09-02
+
+### Corregido
+
+- El `stamp` del encabezado se apilaba en varias líneas cuando el texto crecía o llevaba `<b>`/`<code>`: era un `inline-flex` sin `flex-wrap` y el texto iba suelto, así que cada etiqueta y cada trozo de texto era un ítem flex aparte. Ahora es `flex` con `flex-wrap`, el punto no se encoge y el texto vive en un solo `<span>` (`assets/template.html`, demo).
+
+### Cambiado
+
+- Regla de contenido del `stamp`: una línea corta en texto plano (fecha-hora · hito en ≤ 8 palabras · fuentes, ≤ 120 caracteres). El relato de avance va en «Siguiente bloque» y en `CONTEXTO` (`SKILL.md`, `references/sections.md`).
+
 ## [1.1.1] - 2026-09-02
 
 ### Eliminado

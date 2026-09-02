@@ -6,7 +6,7 @@ El orden no es decorativo: responde en cascada a "¿cómo vamos?" → "¿dónde 
 
 Eyebrow (contexto: sub-proyecto, cliente, área) · H1 (nombre corto, no una frase) · subtítulo con qué es, dónde corre y **qué NO toca** · `stamp` con fecha-hora del corte, hito vivo y fuentes.
 
-El `stamp` es la firma del dato: sin fecha y fuentes, el tablero no se publica.
+El `stamp` es la firma del dato: sin fecha y fuentes, el tablero no se publica. Es **una línea corta**: fecha-hora, hito vivo en ocho palabras o menos y las fuentes, en texto plano (sin `<b>` ni `<code>`), 120 caracteres como techo. Todo lo demás — qué se cerró, qué falta, quién debe qué — va en el medidor «Siguiente bloque» y en `CONTEXTO`. El texto va dentro del `<span>` que sigue al punto: la firma es un flex y, fuera del span, cada etiqueta y cada trozo de texto pasa a ser un ítem aparte que se apila en cuanto la línea crece (defecto visto el 2026-09-01).
 
 Debajo va el **sello**, dos botones que se rellenan solos desde `EMBLEMA` y `CONTEXTO`:
 

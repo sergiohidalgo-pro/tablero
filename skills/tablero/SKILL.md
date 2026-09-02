@@ -4,7 +4,7 @@ description: "Trigger: tablero, estado del proyecto, dónde vamos, avance, proje
 license: MIT
 metadata:
   author: "sergiohidalgo-pro"
-  version: "1.1.1"
+  version: "1.1.2"
 ---
 
 ## Activation Contract
@@ -21,6 +21,7 @@ Do NOT load for a one-line status answer, a commit log summary, or a plain check
 - Costs are incremental: only what is new. Name the price source and date, and list what is excluded because it was already paid.
 - Never invent qualitative claims about rhythm or productivity. `EVAL_EXTRA` entries need a time and a result.
 - `CONTEXTO.estado` measures whether the project can proceed unblocked, NOT how much is done. Green only when nothing but hours is missing; red when a decision, credential or answer someone else owes is what stands in the way. Every `falta` entry names the owner or the input it waits on.
+- The `stamp` is one short plain-text line (date-time · milestone in ≤ 8 words · sources, ≤ 120 characters, no `<b>`/`<code>`), kept inside the `<span>` after the dot. Progress narrative belongs in the "Siguiente bloque" meter and in `CONTEXTO`, never in the stamp.
 - `EMBLEMA.emoji` must match the artifact `favicon`, and `porque` must justify the choice in two sentences. If you cannot, pick a different emoji.
 - Do not edit the CSS in `assets/template.html`: the palette, typography and motion ARE the format. Extend by adding sections, not by restyling.
 - If you add movement, follow the performance rules in `references/design-system.md`: nothing animates off-screen, nothing that moves carries a `drop-shadow`, and a re-render is not a re-animation.
@@ -55,7 +56,7 @@ Do NOT load for a one-line status answer, a commit log summary, or a plain check
 2. Copy `assets/template.html` to the working file (scratchpad, or where the user asks). For a local file, wrap it with `assets/local-wrapper.html` — the template is a fragment and only the Artifact tool supplies the html/head/body shell.
 3. When updating an existing tablero: read the live version FIRST, diff it against your evidence, and keep every fact it has that you did not re-verify. Check its data block against `references/data-contract.md`: a tablero built with an older version may lack whole blocks (`EMBLEMA` and `CONTEXTO` arrived in 1.1.0), so add what is missing from evidence instead of merging figures only. If the Artifact tool hands you the live version as a file, read it whole, line 1 included: the tool rejects a republish built on a partial read. Publish only additions and corrections you can source.
 4. Fill the `// ---------- data ----------` block only: `EMBLEMA`, `CONTEXTO`, `PHASES`, `SESSIONS`, `COSTS`, `DONE_BARS`, `TODAY`, `PHASE_ORDER`, `COST_NOTE`, `EVAL_RECO`, `EVAL_EXTRA`. See `references/data-contract.md`.
-5. Replace every `{{...}}` placeholder in the HTML. Search for `{{` and confirm zero matches before publishing.
+5. Replace every `{{...}}` placeholder in the HTML. Search for `{{` and confirm zero matches before publishing. Check the `stamp`: one `<span>` of plain text, ≤ 120 characters.
 6. Adjust the diagram per `references/sections.md`; the LED, packets and power-on view are injected by JS — only author `<g data-s>`, `<path class="edge">`, `<rect class="zone">`. Give every component a `data-title` and a `data-info` explaining what it is and why it sits in that state: that is what the reader gets when tapping the box.
 7. Render the local file and LOOK at it before handing it over: open it, or capture it with headless Chrome. Reading the code is not enough; visual checks have caught defects the code did not show. Fonts come from Google Fonts and need network; the fallback stack must keep it readable offline.
 8. Only when publishing: use the Artifact tool with a `favicon` stable across redeploys, `title` = short project name, `description` = one line.
